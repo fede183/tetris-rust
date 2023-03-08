@@ -1,4 +1,4 @@
-use bevy::{prelude::*, sprite::MaterialMesh2dBundle};
+use bevy::prelude::*;
 
 use crate::{components::point::Point, consts::{POINT_SIZE, POINT_COLOR}};
 
@@ -11,22 +11,17 @@ impl Plugin for PointPlugin {
 }
 
 fn setup_point(
-    mut commands: Commands,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<ColorMaterial>>,
-) {
-    let mut point = Mesh::from(shape::Quad::default());
-    
-    let position = vec![[0.0, 0.0, 0.0], [0.0, 1.0, 0.0], [1.0, 1.0, 0.0], [1.0, 0.0, 0.0]];
-    point.insert_attribute(Mesh::ATTRIBUTE_POSITION, position);
-
-    commands.spawn((MaterialMesh2dBundle {
-        mesh: meshes.add(point).into(),
-        transform: Transform::default().with_scale(POINT_SIZE),
-        material: materials.add(ColorMaterial::from(POINT_COLOR)),
+    mut commands: Commands
+) { 
+    commands.spawn((SpriteBundle {
+        sprite: Sprite {
+            color: POINT_COLOR,
+            custom_size: Some(POINT_SIZE),
+            ..default()
+        },
+        transform: Transform::from_translation(Vec3::new(-50., 0., 0.)),
         ..default()
-    },
-    Point));
+    }, Point));
 }
 
 
