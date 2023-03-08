@@ -15,7 +15,10 @@ fn setup_point(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<ColorMaterial>>,
 ) {
-    let point = Mesh::from(shape::Quad::default());
+    let mut point = Mesh::from(shape::Quad::default());
+    
+    let position = vec![[0.0, 0.0, 0.0], [0.0, 1.0, 0.0], [1.0, 1.0, 0.0], [1.0, 0.0, 0.0]];
+    point.insert_attribute(Mesh::ATTRIBUTE_POSITION, position);
 
     commands.spawn((MaterialMesh2dBundle {
         mesh: meshes.add(point).into(),
