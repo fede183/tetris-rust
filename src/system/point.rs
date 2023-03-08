@@ -1,39 +1,35 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, sprite::MaterialMesh2dBundle};
 
-use crate::components::piece::{Piece, PIECE_SIZE, PIECE_COLOR};
+use crate::components::point::{POINT_COLOR, POINT_SIZE, Point};
 
-pub struct PiecePlugin;
+pub struct PointPlugin;
 
-impl Plugin for PiecePlugin {
+impl Plugin for PointPlugin {
     fn build(&self, app: &mut App) {
-        app.add_startup_system(setup_piece);
+        app.add_startup_system(setup_point).add_system(move_point);
     }
 }
 
-fn setup_piece(
+fn setup_point(
     mut commands: Commands,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut materials: ResMut<Assets<ColorMaterial>>,
 ) {
-    commands.spawn(Camera2dBundle::default());
+    let point = Mesh::from(shape::Quad::default());
 
-    commands.spawn((SpriteBundle {
-        transform: Transform {
-            translation: Vec3::new(0.0, 50.0, 0.0),
-            scale: PIECE_SIZE,
-            ..default()
-        },
-        sprite: Sprite {
-            color: PIECE_COLOR,
-            ..default()
-        },
+    commands.spawn((MaterialMesh2dBundle {
+        mesh: meshes.add(point).into(),
+        transform: Transform::default().with_scale(POINT_SIZE),
+        material: materials.add(ColorMaterial::from(POINT_COLOR)),
         ..default()
-    }, 
-    Piece
-    ));
+    },
+    Point));
 }
 
-pub fn move_piece(
+
+pub fn move_point(
     keyboard_input: Res<Input<KeyCode>>,
-    mut query: Query<&mut Transform, With<Piece>>,
+    mut query: Query<&mut Transform, With<Point>>,
 ) {
     if let Ok(mut transform) = query.get_single_mut() {
         let mut direction_x = 0.0;
