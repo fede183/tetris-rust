@@ -1,6 +1,6 @@
 use bevy::{prelude::*, sprite::MaterialMesh2dBundle};
 
-use crate::components::point::{POINT_COLOR, POINT_SIZE, Point};
+use crate::{components::point::Point, consts::{POINT_SIZE, POINT_COLOR}};
 
 pub struct PointPlugin;
 

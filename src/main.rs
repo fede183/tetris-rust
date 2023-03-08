@@ -1,6 +1,7 @@
 mod components;
 mod entities;
 mod system;
+mod consts;
 
 use bevy::{prelude::*, window::PresentMode};
 
