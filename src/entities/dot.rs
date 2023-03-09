@@ -1,0 +1,1 @@
+pub struct Dot(pub i8, pub i8);

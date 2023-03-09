@@ -5,7 +5,7 @@ mod consts;
 
 use bevy::{prelude::*, window::PresentMode};
 
-use system::{point::PointPlugin, setup::setup};
+use system::{piece::PiecePlugin, setup::setup};
 
 static BACKGROUND_COLOR: Color = Color::WHITE;
 
@@ -25,7 +25,7 @@ fn main() {
             }),
             ..default()
         }))
-        .add_plugin(PointPlugin)
+        .add_plugin(PiecePlugin)
         .add_startup_system(setup)
         .add_system(bevy::window::close_on_esc)
         .run();
