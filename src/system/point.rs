@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 
-use crate::{components::point::Point, consts::{POINT_SIZE, POINT_COLOR}};
+use crate::{components::point::Point, consts::{POINT_SIZE, POINT_COLOR, POINT_INTERNAL_SIZE, BACKGROUND_COLOR}};
+
 
 pub struct PointPlugin;
 
@@ -11,17 +12,32 @@ impl Plugin for PointPlugin {
 }
 
 fn setup_point(
-    mut commands: Commands
+    mut commands: Commands,
 ) { 
-    commands.spawn((SpriteBundle {
+
+    let first_quad = SpriteBundle {
         sprite: Sprite {
             color: POINT_COLOR,
             custom_size: Some(POINT_SIZE),
             ..default()
         },
-        transform: Transform::from_translation(Vec3::new(-50., 0., 0.)),
+        transform: Transform::from_translation(Vec3::new(-30., 0., 0.)),
         ..default()
-    }, Point));
+    };
+
+    let second_quad = SpriteBundle {
+        sprite: Sprite {
+            color: BACKGROUND_COLOR,
+            custom_size: Some(POINT_INTERNAL_SIZE),
+            ..default()
+        },
+        transform: Transform::from_translation(Vec3::new(0., 0., 1.)),
+        ..default()
+    };
+
+    commands.spawn((first_quad, Point)).with_children(|parent| {
+        parent.spawn(second_quad);
+    });
 }
 
 
