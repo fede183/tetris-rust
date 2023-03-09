@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{components::piece::Piece, entities::{brick::Brick, dot::Dot}};
+use crate::{components::piece::Piece, entities::brick_type::BrickTypes};
 
 use super::point::spawn_point;
 
@@ -8,7 +8,7 @@ pub struct PiecePlugin;
 
 impl Plugin for PiecePlugin {
     fn build(&self, app: &mut App) {
-        app.add_startup_system(spaw_piece).add_system(move_piece);
+        app.add_startup_system(spaw_piece).add_system(move_piece).add_system(add_piece);
     }
 }
 
@@ -21,7 +21,7 @@ fn spaw_piece(
         ..default()
     };
 
-    let brick = Brick {dots: [Dot(0, 1), Dot(1, 1), Dot(2, 1), Dot(3, 1)] };
+    let brick = BrickTypes::get_random_brick();
 
     commands.spawn((a_piece, Piece))
     .with_children(|child| {
@@ -32,7 +32,7 @@ fn spaw_piece(
 }
 
 
-pub fn move_piece(
+fn move_piece(
     keyboard_input: Res<Input<KeyCode>>,
     mut query: Query<&mut Transform, With<Piece>>,
 ) {
@@ -60,4 +60,19 @@ pub fn move_piece(
         transform.translation.y += direction_y * 3.0;
     }
 
+}
+
+
+fn add_piece(
+    keyboard_input: Res<Input<KeyCode>>,
+    mut commands: Commands,
+    query: Query<(Entity, &Transform), With<Piece>>,
+) {
+    if let Ok((entity, _)) = query.get_single() {
+        if keyboard_input.just_pressed(KeyCode::Space) {
+            commands.entity(entity).despawn_recursive();
+
+            spaw_piece(commands);
+        }
+    }
 }
