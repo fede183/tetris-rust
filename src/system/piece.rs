@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{components::piece::Piece, entities::brick_type::BrickTypes};
+use crate::{components::piece::Piece, entities::brick_type::BrickTypes, consts::POINT_SIZE};
 
 use super::point::spawn_point;
 
@@ -17,7 +17,7 @@ fn spaw_piece(
 ) { 
 
     let a_piece = SpriteBundle {
-        transform: Transform::from_translation(Vec3::new(-30., 0., 0.)),
+        transform: Transform::from_translation(Vec3::new(0., 0., 0.)),
         ..default()
     };
 
@@ -40,24 +40,24 @@ fn move_piece(
         let mut direction_x = 0.0;
         let mut direction_y = 0.0;
 
-        if keyboard_input.pressed(KeyCode::Left) {
+        if keyboard_input.just_pressed(KeyCode::Left) {
             direction_x -= 1.0;
         }
     
-        if keyboard_input.pressed(KeyCode::Right) {
+        if keyboard_input.just_pressed(KeyCode::Right) {
             direction_x += 1.0;
         }
     
-        if keyboard_input.pressed(KeyCode::Down) {
+        if keyboard_input.just_pressed(KeyCode::Down) {
             direction_y -= 1.0;
         }
     
-        if keyboard_input.pressed(KeyCode::Up) {
-            direction_y += 1.0;
+        if keyboard_input.just_pressed(KeyCode::Up) {
+            transform.rotate_local_z((90.0_f32).to_radians());
         }
     
-        transform.translation.x += direction_x * 3.0;
-        transform.translation.y += direction_y * 3.0;
+        transform.translation.x += direction_x * POINT_SIZE;
+        transform.translation.y += direction_y * POINT_SIZE;
     }
 
 }

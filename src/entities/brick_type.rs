@@ -11,6 +11,13 @@ pub enum BrickTypes {
 }
 
 impl BrickTypes {
+
+    // x 0 1 2 3
+    // 0 x x x x
+    // 1 x x x x
+    // 2 x x x x
+    // 3 x x x x
+
     pub fn get_brick(&self) -> Brick {
         match self {
             BrickTypes::Line => Brick {dots: [Dot(0, 1), Dot(1, 1), Dot(2, 1), Dot(3, 1)] },
