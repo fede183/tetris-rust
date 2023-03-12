@@ -8,6 +8,11 @@ use rand::{prelude::*, distributions::Uniform};
 pub enum BrickTypes {
     Line,
     Square,
+    T,
+    Z,
+    ZReverse,
+    L,
+    LReverse,
 }
 
 impl BrickTypes {
@@ -20,8 +25,13 @@ impl BrickTypes {
 
     pub fn get_brick(&self) -> Brick {
         match self {
-            BrickTypes::Line => Brick {dots: [Dot(0, 1), Dot(1, 1), Dot(2, 1), Dot(3, 1)] },
-            BrickTypes::Square => Brick {dots: [Dot(1, 1), Dot(2, 1), Dot(1, 2), Dot(2, 2)] },
+            BrickTypes::Line => Brick {dots: [Dot(0, 1), Dot(1, 1), Dot(2, 1), Dot(3, 1)], rotation_center: 1.5 },
+            BrickTypes::Square => Brick {dots: [Dot(1, 1), Dot(2, 1), Dot(1, 2), Dot(2, 2)], rotation_center: 1.5 },
+            BrickTypes::T => Brick {dots: [Dot(0, 1), Dot(1, 0), Dot(1, 1), Dot(1, 2)], rotation_center: 1.0 },
+            BrickTypes::Z => Brick {dots: [Dot(0, 0), Dot(0, 1), Dot(1, 1), Dot(1, 2)], rotation_center: 0.5 },
+            BrickTypes::ZReverse => Brick {dots: [Dot(1, 0), Dot(1, 1), Dot(0, 1), Dot(0, 2)], rotation_center: 0.5 },
+            BrickTypes::L => Brick {dots: [Dot(0, 1), Dot(1, 1), Dot(2, 1), Dot(2, 2)], rotation_center: 1.0 },
+            BrickTypes::LReverse => Brick {dots: [Dot(2, 0), Dot(0, 1), Dot(1, 1), Dot(2, 1)], rotation_center: 1.0 },
         }
     }
 

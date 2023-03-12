@@ -1,14 +1,15 @@
 use bevy::prelude::*;
 
-use crate::{consts::{POINT_SIZE, POINT_COLOR, POINT_INTERNAL_SIZE, BACKGROUND_COLOR, DOT_CENTER_DIFF, POINT_SIZE_VEC}, entities::dot::Dot};
+use crate::{consts::{POINT_SIZE, POINT_COLOR, POINT_INTERNAL_SIZE, BACKGROUND_COLOR, POINT_SIZE_VEC}, entities::dot::Dot};
 
 pub fn spawn_point(
     commands: &mut ChildBuilder,
-    dot: &Dot
+    dot: &Dot,
+    rotation_center: f32
 ) { 
 
-    let dot_first_item = dot.0 as f32 - DOT_CENTER_DIFF;
-    let dot_second_item = dot.1 as f32 - DOT_CENTER_DIFF;
+    let dot_first_item = dot.0 as f32 - rotation_center;
+    let dot_second_item = dot.1 as f32 - rotation_center;
 
     let position_x = POINT_SIZE*dot_first_item;
     let position_y = POINT_SIZE*dot_second_item;

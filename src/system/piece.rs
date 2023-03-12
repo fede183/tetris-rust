@@ -26,7 +26,7 @@ fn spaw_piece(
     commands.spawn((a_piece, Piece))
     .with_children(|child| {
         (0..4).for_each(|i| {
-            spawn_point(child, &brick.dots[i])
+            spawn_point(child, &brick.dots[i], brick.rotation_center)
         });
     });
 }
