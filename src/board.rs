@@ -3,6 +3,8 @@ use crate::config::*;
 
 
 pub fn setup_board(mut commands: Commands) {
+    commands.spawn(Camera2dBundle::default());
+
     commands.spawn(SpriteBundle {
         transform: Transform {
             translation: Vec3 {
@@ -11,8 +13,8 @@ pub fn setup_board(mut commands: Commands) {
                 ..default()
             },
             scale: Vec3 {
-                x: DISPLAY_BOARD_HEIGHT,
-                y: DISPLAY_BOARD_WIGTH,
+                x: DISPLAY_BOARD_WIGTH,
+                y: DISPLAY_BOARD_HEIGHT,
                 z: 0.0,
             },
             ..default()
