@@ -3,8 +3,6 @@ use crate::config::*;
 
 
 pub fn setup_board(mut commands: Commands) {
-    commands.spawn(Camera2dBundle::default());
-
     commands.spawn(SpriteBundle {
         transform: Transform {
             translation: Vec3 {
