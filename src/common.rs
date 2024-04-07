@@ -11,19 +11,18 @@ pub fn init_camera(mut commands: Commands) {
     commands.spawn(Camera2dBundle::default());
 }
 
-pub fn draw_rectable(mut commands: Commands, x_position: f32, y_position: f32, height: f32, wigth: f32, border_size: f32, 
-                     fill_color: Color, border_color: Color) {
+pub fn draw_rectable(commands: &mut Commands, positions: Vec3, height: f32, wigth: f32, border_size: f32, fill_color: Color, border_color: Color) {
     commands.spawn(SpriteBundle {
         transform: Transform {
             translation: Vec3 {
-                x: x_position,
-                y: y_position,
-                z: 1.,
+                x: positions.x,
+                y: positions.y,
+                z: positions.z + 1.,
             },
             scale: Vec3 {
                 x: wigth,
                 y: height,
-                z: 1.,
+                z: positions.z + 1.,
             },
             ..default()
         },
@@ -36,14 +35,14 @@ pub fn draw_rectable(mut commands: Commands, x_position: f32, y_position: f32, h
     commands.spawn(SpriteBundle {
         transform: Transform {
             translation: Vec3 {
-                x: x_position,
-                y: y_position,
-                z: 0.,
+                x: positions.x,
+                y: positions.y,
+                z: positions.z,
             },
             scale: Vec3 {
                 x: wigth + border_size,
                 y: height + border_size,
-                z: 0.,
+                z: positions.z,
             },
             ..default()
         },
