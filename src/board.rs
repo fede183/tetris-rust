@@ -58,14 +58,14 @@ pub fn setup_board(mut commands: Commands, query: Query<(&Piece, &RemainingPoint
         }
     }
 
-    for (piece, remaining) in &query {
-       draw_piece_on_board(&mut commands, piece); 
-    }
+    let (piece, remaining) = query.single(); 
+    draw_piece_on_board(&mut commands, piece); 
+    
 }
 
 pub fn setup_next_piece_board(mut commands: Commands, query: Query<&NextPiece>) {
     draw_rectangle_with_border(&mut commands, Vec3{ x: DISPLAY_NEXT_PIECE_POSITION_X, y: DISPLAY_NEXT_PIECE_POSITION_Y, z: 0.}, DISPLAY_NEXT_PIECE_HEIGHT, DISPLAY_NEXT_PIECE_WIGTH, BORDER_SIZE, BOARD_COLOR, BORDER_COLOR);
-    for next_piece in &query {
-        draw_next_piece(&mut commands, &next_piece.0);
-    }
+
+    let next_piece = query.single();
+    draw_next_piece(&mut commands, &next_piece.0);
 }

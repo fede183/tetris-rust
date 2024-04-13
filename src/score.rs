@@ -19,25 +19,26 @@ pub fn setup_score(mut commands: Commands, asset_server: Res<AssetServer>, query
         color: SCORE_COLOR,
     };
     let text_justification = JustifyText::Center;
-    for score in &query {
-        let score_text = "Score: ".to_owned() + &score.score.to_string();
-        let lines_text = "Lines: ".to_owned() + &score.lines.to_string();
 
-        commands.spawn((
-            Text2dBundle {
-                text: Text::from_section(score_text, text_style.clone())
-                    .with_justify(text_justification),
-                transform: Transform::from_xyz(-DISPLAY_SCORE_POSITION_X, DISPLAY_SCORE_POSITION_Y, 0.),
-                ..default()
-            },
-        ));
-        commands.spawn((
-            Text2dBundle {
-                text: Text::from_section(lines_text, text_style.clone())
-                    .with_justify(text_justification),
-                transform: Transform::from_xyz(-DISPLAY_SCORE_POSITION_X, DISPLAY_LINES_POSITION_Y, 0.),
-                ..default()
-            },
-        ));
-    }
+    let score = query.single();
+
+    let score_text = "Score: ".to_owned() + &score.score.to_string();
+    let lines_text = "Lines: ".to_owned() + &score.lines.to_string();
+
+    commands.spawn((
+        Text2dBundle {
+            text: Text::from_section(score_text, text_style.clone())
+                .with_justify(text_justification),
+            transform: Transform::from_xyz(-DISPLAY_SCORE_POSITION_X, DISPLAY_SCORE_POSITION_Y, 0.),
+            ..default()
+        },
+    ));
+    commands.spawn((
+        Text2dBundle {
+            text: Text::from_section(lines_text, text_style.clone())
+                .with_justify(text_justification),
+            transform: Transform::from_xyz(-DISPLAY_SCORE_POSITION_X, DISPLAY_LINES_POSITION_Y, 0.),
+            ..default()
+        },
+    ));
 }
