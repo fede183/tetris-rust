@@ -44,6 +44,14 @@ pub struct Piece(pub Vec<PointOnBoard>);
 #[derive(Component)]
 pub struct NextPiece(pub Piece);
 
+impl Piece {
+    pub fn descend(&mut self) {
+        for point in &mut self.0 {
+            point.y += 1;
+        }
+    }
+}
+
 
 pub fn init_board(mut commands: Commands) {
     commands.spawn((generate_new_piece(), RemainingPointsOnBoard { 0: Vec::new() }));
