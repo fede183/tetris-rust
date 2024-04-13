@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::{config::*, draw_cell_on_board, draw_piece_on_board};
+use crate::{config::*};
 use crate::common::{draw_next_piece, draw_rectangle_with_border};
 use rand::Rng;
 
@@ -44,27 +44,27 @@ pub struct Piece(pub Vec<PointOnBoard>);
 #[derive(Component)]
 pub struct NextPiece(pub Piece);
 
+#[derive(Component)]
+pub struct Board;
 
 pub fn init_board(mut commands: Commands) {
-    commands.spawn((generate_new_piece(), RemainingPointsOnBoard { 0: Vec::new() }));
-    commands.spawn(NextPiece { 0: generate_new_piece() });
+    commands.spawn((Board, generate_new_piece(), NextPiece { 0: generate_new_piece() }, RemainingPointsOnBoard { 0: Vec::new() }));
 }
 
-pub fn setup_board(mut commands: Commands, query: Query<(&Piece, &RemainingPointsOnBoard)>) {
-    draw_rectangle_with_border(&mut commands, Vec3{ x: 0., y: 0., z: 0.}, DISPLAY_BOARD_HEIGHT, DISPLAY_BOARD_WIGTH, BORDER_SIZE, BOARD_COLOR, BORDER_COLOR);
+pub fn setup_board(mut commands: Commands) {
+    draw_rectable_with_border(&mut commands, Vec3{ x: 0., y: 0., z: 0.}, DISPLAY_BOARD_HEIGHT, DISPLAY_BOARD_WIGTH, BORDER_SIZE, BOARD_COLOR, BORDER_COLOR);
     for x in 0..10 {
         for y in 0..20 {
-            draw_cell_on_board(&mut commands, x, y);
+            let x_position = SQUARE_SIZE* (x as f32);
+            let y_position = SQUARE_SIZE* (y as f32);
+            let square_size = SQUARE_SIZE - 5.;
+            draw_rectable_with_border(&mut commands, Vec3{ x: -DISPLAY_FIRST_BOARD_POSITION_X + x_position, y: DISPLAY_FIRST_BOARD_POSITION_Y - y_position, z: 1.}, square_size, square_size, 5., BOARD_COLOR, BORDER_SQUARE_COLOR);
         }
-    }
-
-    for (piece, remaining) in &query {
-       draw_piece_on_board(&mut commands, piece); 
     }
 }
 
 pub fn setup_next_piece_board(mut commands: Commands, query: Query<&NextPiece>) {
-    draw_rectangle_with_border(&mut commands, Vec3{ x: DISPLAY_NEXT_PIECE_POSITION_X, y: DISPLAY_NEXT_PIECE_POSITION_Y, z: 0.}, DISPLAY_NEXT_PIECE_HEIGHT, DISPLAY_NEXT_PIECE_WIGTH, BORDER_SIZE, BOARD_COLOR, BORDER_COLOR);
+    draw_rectable_with_border(&mut commands, Vec3{ x: DISPLAY_NEXT_PIECE_POSITION_X, y: DISPLAY_NEXT_PIECE_POSITION_Y, z: 0.}, DISPLAY_NEXT_PIECE_HEIGHT, DISPLAY_NEXT_PIECE_WIGTH, BORDER_SIZE, BOARD_COLOR, BORDER_COLOR);
     for next_piece in &query {
         draw_next_piece(&mut commands, &next_piece.0);
     }
