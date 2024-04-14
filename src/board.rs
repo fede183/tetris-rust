@@ -1,79 +1,87 @@
 use bevy::prelude::*;
-use crate::{config::*, draw_cell_on_board, draw_piece_on_board};
-use crate::common::{draw_next_piece, draw_rectangle_with_border};
+use crate::{config::*, generate_rectangle};
+use crate::common::{generate_rectangle_with_border};
+use crate::game::*;
 use rand::Rng;
 
 const COLORS: [Color; 5] = [Color::RED, Color::BLUE, Color::YELLOW, Color::GREEN, Color::PURPLE];
 
-fn generate_new_piece() -> Piece {
+fn generate_random_color() -> Color {
     let mut rng = rand::thread_rng();
-    let index: usize = rng.gen_range(0..=4);
     let color_int: usize = rng.gen_range(0..=4);
-    let figures = [
-        [(0, 0), (0, 1), (0, 2), (1, 2)],
-        [(1, 0), (1, 1), (1, 2), (0, 2)],
-        [(0, 0), (1, 0), (1, 1), (2, 1)],
-        [(0, 1), (1, 0), (1, 1), (2, 0)],
-        [(0, 0), (0, 1), (1, 0), (1, 1)],
-        [(0, 0), (1, 0), (2, 0), (3, 1)],
-    ];
     let color: Color = *(COLORS.get(color_int).unwrap());
 
-    let mut points: Vec<PointOnBoard> = Vec::new();
-    for index_in_figure in 0..4 {
-        let (x, y) = figures[index][index_in_figure];
-        points.push(PointOnBoard { x, y, color });
-    }
+    color
+}
 
-    Piece { 0: points }
+fn get_position_on_board(x: i32, y: i32) -> (f32, f32) {
+    let x_position = SQUARE_SIZE* (x as f32);
+    let y_position = SQUARE_SIZE* (y as f32);
+
+    (-DISPLAY_FIRST_BOARD_POSITION_X + x_position, DISPLAY_FIRST_BOARD_POSITION_Y - y_position)
+}
+
+fn get_position_point_on_board(x: i32, y: i32) -> Vec3 {
+    let (x_position, y_position) = get_position_on_board(x, y);
+
+    Vec3 { x: x_position as f32, y: y_position as f32, z: 2.}
+}
+
+fn get_position_on_next_piece(x: i32, y: i32) -> (f32, f32) {
+    let x_position = SQUARE_SIZE* (x as f32);
+    let y_position = SQUARE_SIZE* (y as f32);
+
+    (DISPLAY_NEXT_PIECE_POSITION_X + x_position, DISPLAY_NEXT_PIECE_POSITION_Y + y_position)
+}
+
+fn get_position_point_next_piece(x: i32, y: i32) -> Vec3 {
+    let (x_position, y_position) = get_position_on_next_piece(x, y);
+
+    Vec3 { x: x_position as f32, y: y_position as f32, z: 2.}
+}
+
+fn generate_cell_on_board(x: i32, y: i32) -> [SpriteBundle; 2] {
+    let (x_position, y_position) = get_position_on_board(x, y);
+    let square_size = SQUARE_SIZE - 5.;
+    generate_rectangle_with_border(Vec3{ x: x_position, y: y_position, z: 1.}, square_size, square_size, 5., BOARD_COLOR, BORDER_SQUARE_COLOR)
+}
+
+fn spawn_point_in_next_piece(x: i32, y: i32, color: Color) {
+    let sprite = generate_rectangle(get_position_point_next_piece(x, y), SQUARE_SIZE, SQUARE_SIZE, color);
+}
+
+fn generate_point_in_board(x: i32, y: i32, color: Color) -> PointComponent {
+    let (x_position, y_position) = get_position_on_board(x, y);
+    let sprite = generate_rectangle(Vec3{ x: x_position, y: y_position, z: 2.}, SQUARE_SIZE, SQUARE_SIZE, color);
+    PointComponent { 0: sprite }
 }
 
 #[derive(Component)]
-pub struct PointOnBoard {
-    pub x: i32,
-    pub y: i32,
-    pub color: Color,
+pub struct PointComponent(SpriteBundle);
+
+#[derive(Component)]
+pub struct RemainingPointsComponent;
+
+#[derive(Component)]
+pub struct PieceComponent {
+    pub points: Vec<PointComponent>,
 }
 
 #[derive(Component)]
-pub struct RemainingPointsOnBoard(Vec<PointOnBoard>);
-
-#[derive(Component)]
-pub struct Piece(pub Vec<PointOnBoard>);
-
-#[derive(Component)]
-pub struct NextPiece(pub Piece);
-
-impl Piece {
-    pub fn descend(&mut self) {
-        for point in &mut self.0 {
-            point.y += 1;
-        }
-    }
-}
+pub struct NextPieceComponent;
 
 
 pub fn init_board(mut commands: Commands) {
-    commands.spawn((generate_new_piece(), RemainingPointsOnBoard { 0: Vec::new() }));
-    commands.spawn(NextPiece { 0: generate_new_piece() });
-}
-
-pub fn setup_board(mut commands: Commands, query: Query<(&Piece, &RemainingPointsOnBoard)>) {
-    draw_rectangle_with_border(&mut commands, Vec3{ x: 0., y: 0., z: 0.}, DISPLAY_BOARD_HEIGHT, DISPLAY_BOARD_WIGTH, BORDER_SIZE, BOARD_COLOR, BORDER_COLOR);
+    commands.spawn_batch(generate_rectangle_with_border(Vec3{ x: 0., y: 0., z: 0.}, DISPLAY_BOARD_HEIGHT, DISPLAY_BOARD_WIGTH, BORDER_SIZE, BOARD_COLOR, BORDER_COLOR));
     for x in 0..10 {
         for y in 0..20 {
-            draw_cell_on_board(&mut commands, x, y);
+            commands.spawn_batch(generate_cell_on_board(x, y));
         }
     }
+    commands.spawn_batch(generate_rectangle_with_border(Vec3{ x: DISPLAY_NEXT_PIECE_POSITION_X, y: DISPLAY_NEXT_PIECE_POSITION_Y, z: 0.}, DISPLAY_NEXT_PIECE_HEIGHT, DISPLAY_NEXT_PIECE_WIGTH, BORDER_SIZE, BOARD_COLOR, BORDER_COLOR));
 
-    let (piece, remaining) = query.single(); 
-    draw_piece_on_board(&mut commands, piece); 
-    
 }
 
-pub fn setup_next_piece_board(mut commands: Commands, query: Query<&NextPiece>) {
-    draw_rectangle_with_border(&mut commands, Vec3{ x: DISPLAY_NEXT_PIECE_POSITION_X, y: DISPLAY_NEXT_PIECE_POSITION_Y, z: 0.}, DISPLAY_NEXT_PIECE_HEIGHT, DISPLAY_NEXT_PIECE_WIGTH, BORDER_SIZE, BOARD_COLOR, BORDER_COLOR);
+pub fn init_board_pieces(mut commands: Commands) {
 
-    let next_piece = query.single();
-    draw_next_piece(&mut commands, &next_piece.0);
 }
