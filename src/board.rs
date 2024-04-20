@@ -1,8 +1,20 @@
 use bevy::prelude::*;
+use crate::game::game_state::GameData;
 use crate::{config::*, generate_rectangle};
-use crate::common::{generate_rectangle_with_border};
-use crate::game::*;
-use rand::Rng;
+use crate::common::generate_rectangle_with_border;
+use crate::game::piece::Piece;
+use crate::game::point::Point;
+use crate::game::point::PointColor;
+
+fn get_color(color: PointColor) -> Color {
+
+    match color {
+        PointColor::RED => Color::RED,
+        PointColor::BLUE => Color::BLUE,
+        PointColor::YELLOW => Color::YELLOW,
+        PointColor::GREEN => Color::GREEN,
+    }
+}
 
 fn get_position_on_board(x: i32, y: i32) -> (f32, f32) {
     let x_position = SQUARE_SIZE* (x as f32);
@@ -36,27 +48,47 @@ fn generate_cell_on_board(x: i32, y: i32) -> [SpriteBundle; 2] {
     generate_rectangle_with_border(Vec3{ x: x_position, y: y_position, z: 1.}, square_size, square_size, 5., BOARD_COLOR, BORDER_SQUARE_COLOR)
 }
 
-fn spawn_point_in_next_piece(x: i32, y: i32, color: Color) {
-    let sprite = generate_rectangle(get_position_point_next_piece(x, y), SQUARE_SIZE, SQUARE_SIZE, color);
+fn generate_point_in_next_piece(point: &Point) -> SpriteBundle {
+    let color = get_color(point.color);
+    let sprite = generate_rectangle(get_position_point_next_piece(point.x, point.y), SQUARE_SIZE, SQUARE_SIZE, color);
+
+    sprite
 }
 
-fn generate_point_in_board(x: i32, y: i32, color: Color) -> PointComponent {
-    let (x_position, y_position) = get_position_on_board(x, y);
+fn generate_point_in_board(point: &Point) -> SpriteBundle {
+    let (x_position, y_position) = get_position_on_board(point.x, point.y);
+    let color = get_color(point.color);
     let sprite = generate_rectangle(Vec3{ x: x_position, y: y_position, z: 2.}, SQUARE_SIZE, SQUARE_SIZE, color);
-    PointComponent { 0: sprite }
+
+    sprite
+}
+
+fn generate_next_piece(piece: &Piece) -> Vec<SpriteBundle> {
+    let sprites = piece.points.iter().map(|point| generate_point_in_next_piece(point)).collect();
+
+    sprites
+}
+
+fn generate_piece(piece: &Piece) -> Vec<SpriteBundle> {
+    let sprites = piece.points.iter().map(|point| generate_point_in_board(point)).collect();
+
+    sprites
 }
 
 #[derive(Component)]
-pub struct PointComponent(SpriteBundle);
-
-#[derive(Component)]
-pub struct RemainingPointsComponent;
+pub struct PointComponent;
 
 #[derive(Component)]
 pub struct PieceComponent;
 
 #[derive(Component)]
+pub struct BoardPieceComponent;
+
+#[derive(Component)]
 pub struct NextPieceComponent;
+
+#[derive(Component)]
+pub struct RemainingPointsComponent;
 
 
 pub fn init_board(mut commands: Commands) {
@@ -70,6 +102,22 @@ pub fn init_board(mut commands: Commands) {
 
 }
 
-pub fn init_board_pieces(mut commands: Commands) {
+pub fn init_board_pieces(mut commands: Commands, mut game_data: ResMut<GameData>) {
+    let piece = &game_data.piece;
+    let next_piece = &game_data.next_piece;
 
+    commands.spawn(BoardPieceComponent)
+        .insert(PieceComponent)
+        .with_children(|parent| { 
+            for sprite in generate_piece(piece) {
+                parent.spawn(sprite);
+            }
+        });
+    commands.spawn(NextPieceComponent)
+        .insert(PieceComponent)
+        .with_children(|parent| { 
+            for sprite in generate_next_piece(next_piece) {
+                parent.spawn(sprite);
+            }
+        });
 }

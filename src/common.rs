@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::{config::*, PieceComponent, PointComponent};
+use crate::config::*;
 
 pub fn toggle_resolution(mut windows: Query<&mut Window>) {
     let mut window = windows.single_mut();

@@ -1,6 +1,5 @@
 use rand_derive2::RandGen;
 use rand;
-use rand::Rng;
 use super::point::{Point, PointColor};
 
 
@@ -74,7 +73,7 @@ impl Piece {
 
         Piece { points }
     }
-    pub fn rorate(&mut self) {
+    pub fn rotate(&mut self) {
         
     }
 }

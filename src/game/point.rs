@@ -1,6 +1,5 @@
 use rand_derive2::RandGen;
 use rand;
-use rand::Rng;
 
 #[derive(Debug, RandGen, Clone, Copy)]
 pub enum PointColor {

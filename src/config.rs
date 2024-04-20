@@ -1,4 +1,5 @@
 use bevy::prelude::Color;
+use crate::game::consts::*;
 
 pub const SQUARE_SIZE: f32 = 30.;
 
@@ -7,9 +8,6 @@ const WINDOW_WIGTH: f32 = 30.;
 
 pub const DISPLAY_WINDOW_HEIGHT: f32 = SQUARE_SIZE*WINDOW_HEIGHT;
 pub const DISPLAY_WINDOW_WIGTH: f32 = SQUARE_SIZE*WINDOW_WIGTH;
-
-const BOARD_HEIGHT: f32 = 20.;
-const BOARD_WIGTH: f32 = 10.;
 
 pub const DISPLAY_BOARD_HEIGHT: f32 = SQUARE_SIZE*BOARD_HEIGHT;
 pub const DISPLAY_BOARD_WIGTH: f32 = SQUARE_SIZE*BOARD_WIGTH;
