@@ -4,16 +4,6 @@ use crate::common::{generate_rectangle_with_border};
 use crate::game::*;
 use rand::Rng;
 
-const COLORS: [Color; 5] = [Color::RED, Color::BLUE, Color::YELLOW, Color::GREEN, Color::PURPLE];
-
-fn generate_random_color() -> Color {
-    let mut rng = rand::thread_rng();
-    let color_int: usize = rng.gen_range(0..=4);
-    let color: Color = *(COLORS.get(color_int).unwrap());
-
-    color
-}
-
 fn get_position_on_board(x: i32, y: i32) -> (f32, f32) {
     let x_position = SQUARE_SIZE* (x as f32);
     let y_position = SQUARE_SIZE* (y as f32);
@@ -63,9 +53,7 @@ pub struct PointComponent(SpriteBundle);
 pub struct RemainingPointsComponent;
 
 #[derive(Component)]
-pub struct PieceComponent {
-    pub points: Vec<PointComponent>,
-}
+pub struct PieceComponent;
 
 #[derive(Component)]
 pub struct NextPieceComponent;
