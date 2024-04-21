@@ -7,7 +7,7 @@ use crate::game::point::Point;
 use crate::game::point::PointColor;
 
 pub struct PieceComponentSprites {
-    parent: SpriteBundle,
+    parent: SpatialBundle,
     children: Vec<SpriteBundle>,
 }
 
@@ -66,7 +66,7 @@ fn get_position_on_next_piece(x: i32, y: i32) -> (f32, f32) {
 fn get_position_point_next_piece(x: i32, y: i32) -> Vec3 {
     let (x_position, y_position) = get_position_on_next_piece(x, y);
 
-    Vec3 { x: x_position as f32, y: y_position as f32, z: 2.}
+    Vec3 { x: x_position as f32, y: y_position as f32, z: 4.}
 }
 
 fn generate_point_in_next_piece(point: &Point) -> SpriteBundle {
@@ -96,24 +96,7 @@ fn generate_piece(piece: &Piece) -> Vec<SpriteBundle> {
 }
 
 fn get_next_piece_sprite(next_piece: &Piece) -> PieceComponentSprites {
-    let positions = Vec3 { x: -DISPLAY_NEXT_PIECE_POSITION_X, y: DISPLAY_NEXT_PIECE_POSITION_Y, z: 0. };
-    let color = Color::BLACK;
-    let parent = SpriteBundle {
-            transform: Transform {
-                translation: positions,
-                scale: Vec3 {
-                    x: 0.,
-                    y: 0.,
-                    z: 0.,
-                },
-                ..default()
-            },
-            sprite: Sprite {
-                color,
-                ..default()
-            },
-            ..default()
-        };
+    let parent = SpatialBundle::default();
     let children = generate_next_piece(next_piece);
 
     PieceComponentSprites {
@@ -124,7 +107,6 @@ fn get_next_piece_sprite(next_piece: &Piece) -> PieceComponentSprites {
 
 fn spawn_piece(mut commands: Commands, mut game_data: ResMut<GameData>) {
     let piece = &game_data.piece;
-
     let sprites_piece = generate_piece(piece);
 
     commands.spawn(BoardPieceComponent)
@@ -136,15 +118,17 @@ fn spawn_piece(mut commands: Commands, mut game_data: ResMut<GameData>) {
         });
 }
 
-fn spawn_next_piece(mut commands: Commands, mut game_data: ResMut<GameData>) {
+fn spawn_next_piece(mut commands: Commands, mut game_data: &ResMut<GameData>) {
     let next_piece = &game_data.next_piece;
+    let sprite_next_piece = get_next_piece_sprite(next_piece);
 
-    let sprites_next_piece = generate_next_piece(next_piece);
-
+    println!("spawn the parent of next sprite with position: {}", sprite_next_piece.parent.transform.translation);
     commands.spawn(NextPieceComponent)
         .insert(PieceComponent)
+        .insert(sprite_next_piece.parent)
         .with_children(|parent| { 
-            for sprite in sprites_next_piece {
+            for sprite in sprite_next_piece.children {
+                println!("spawn the children of next sprite with position: {}", sprite.transform.translation);
                 parent.spawn(sprite);
             }
         });
@@ -162,5 +146,5 @@ pub fn init_board(mut commands: Commands) {
 
 pub fn init_board_pieces(mut commands: Commands, mut game_data: ResMut<GameData>) {
     // spawn_piece(commands, game_data);
-    spawn_next_piece(commands, game_data);
+    spawn_next_piece(commands, &game_data);
 }

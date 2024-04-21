@@ -21,7 +21,7 @@ impl PieceType {
 			PieceType::REVERSE_Z => [(1, 0), (1, 1), (1, 2), (0, 2)],
 			PieceType::L => [(0, 0), (1, 0), (1, 1), (2, 1)],
 			PieceType::REVERSE_L => [(0, 1), (1, 0), (1, 1), (2, 0)],
-			PieceType::LINE => [(0, 0), (1, 0), (2, 0), (3, 1)],
+			PieceType::LINE => [(0, 0), (1, 0), (2, 0), (3, 0)],
 			PieceType::CUBE => [(0, 0), (0, 1), (1, 0), (1, 1)],
 			PieceType::T => [(0, 0), (1, 0), (2, 0), (1, 1)],
         }

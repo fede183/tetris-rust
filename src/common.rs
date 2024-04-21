@@ -36,4 +36,3 @@ pub fn generate_rectangle_with_border(positions: Vec3, height: f32, wigth: f32, 
         generate_rectangle(positions, height + border_size, wigth + border_size, border_color) 
     ]
 }
-
