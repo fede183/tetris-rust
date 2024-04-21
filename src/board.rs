@@ -47,7 +47,7 @@ fn get_position_on_board(x: i32, y: i32) -> (f32, f32) {
 fn get_position_point_on_board(x: i32, y: i32) -> Vec3 {
     let (x_position, y_position) = get_position_on_board(x, y);
 
-    Vec3 { x: x_position as f32, y: y_position as f32, z: 2.}
+    Vec3 { x: x_position, y: y_position, z: 3.}
 }
 
 fn generate_cell_on_board(x: i32, y: i32) -> [SpriteBundle; 2] {
@@ -66,7 +66,7 @@ fn get_position_on_next_piece(x: i32, y: i32) -> (f32, f32) {
 fn get_position_point_next_piece(x: i32, y: i32) -> Vec3 {
     let (x_position, y_position) = get_position_on_next_piece(x, y);
 
-    Vec3 { x: x_position as f32, y: y_position as f32, z: 4.}
+    Vec3 { x: x_position, y: y_position, z: 3.}
 }
 
 fn generate_point_in_next_piece(point: &Point) -> SpriteBundle {
@@ -105,30 +105,39 @@ fn get_next_piece_sprite(next_piece: &Piece) -> PieceComponentSprites {
     }
 }
 
-fn spawn_piece(mut commands: Commands, mut game_data: ResMut<GameData>) {
+fn get_board_piece_sprite(piece: &Piece) -> PieceComponentSprites {
+    let parent = SpatialBundle::default();
+    let children = generate_piece(piece);
+
+    PieceComponentSprites {
+        parent,
+        children
+    }
+}
+
+fn spawn_piece(commands: &mut Commands, game_data: &ResMut<GameData>) {
     let piece = &game_data.piece;
-    let sprites_piece = generate_piece(piece);
+    let sprite_piece = get_board_piece_sprite(piece);
 
     commands.spawn(BoardPieceComponent)
         .insert(PieceComponent)
+        .insert(sprite_piece.parent)
         .with_children(|parent| { 
-            for sprite in sprites_piece {
+            for sprite in sprite_piece.children {
                 parent.spawn(sprite);
             }
         });
 }
 
-fn spawn_next_piece(mut commands: Commands, mut game_data: &ResMut<GameData>) {
+fn spawn_next_piece(commands: &mut Commands, game_data: &ResMut<GameData>) {
     let next_piece = &game_data.next_piece;
     let sprite_next_piece = get_next_piece_sprite(next_piece);
 
-    println!("spawn the parent of next sprite with position: {}", sprite_next_piece.parent.transform.translation);
     commands.spawn(NextPieceComponent)
         .insert(PieceComponent)
         .insert(sprite_next_piece.parent)
         .with_children(|parent| { 
             for sprite in sprite_next_piece.children {
-                println!("spawn the children of next sprite with position: {}", sprite.transform.translation);
                 parent.spawn(sprite);
             }
         });
@@ -144,7 +153,7 @@ pub fn init_board(mut commands: Commands) {
     commands.spawn_batch(generate_rectangle_with_border(Vec3{ x: DISPLAY_NEXT_PIECE_POSITION_X, y: DISPLAY_NEXT_PIECE_POSITION_Y, z: 0.}, DISPLAY_NEXT_PIECE_HEIGHT, DISPLAY_NEXT_PIECE_WIGTH, BORDER_SIZE, BOARD_COLOR, BORDER_COLOR));
 }
 
-pub fn init_board_pieces(mut commands: Commands, mut game_data: ResMut<GameData>) {
-    // spawn_piece(commands, game_data);
-    spawn_next_piece(commands, &game_data);
+pub fn init_board_pieces(mut commands: Commands, game_data: ResMut<GameData>) {
+    spawn_piece(&mut commands, &game_data);
+    spawn_next_piece(&mut commands, &game_data);
 }
