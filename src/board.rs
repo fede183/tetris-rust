@@ -30,10 +30,12 @@ fn generate_cell_on_board(commands: &mut Commands) {
     }
 }
 
-fn spawn_piece_as_child(commands: &mut ChildBuilder, sprites: Vec<SpriteBundle>) {
-    for sprite in sprites {
-        commands.spawn(sprite);
-    }
+pub fn init_board(mut commands: Commands) {
+    RectangleWithBorder::new(DISPLAY_BOARD_HEIGHT, DISPLAY_BOARD_WIGTH, BORDER_SIZE, BOARD_COLOR, BORDER_COLOR).spawn(&mut commands, Vec3{ x: 0., y: 0., z: 0.});
+    
+    generate_cell_on_board(&mut commands);
+
+    RectangleWithBorder::new(DISPLAY_NEXT_PIECE_HEIGHT, DISPLAY_NEXT_PIECE_WIGTH, BORDER_SIZE, BOARD_COLOR, BORDER_COLOR).spawn(&mut commands, Vec3{ x: DISPLAY_NEXT_PIECE_POSITION_X, y: DISPLAY_NEXT_PIECE_POSITION_Y, z: 0.});
 }
 
 fn spawn_piece(commands: &mut Commands, game_data: &ResMut<GameData>) {
@@ -52,14 +54,6 @@ fn spawn_next_piece(commands: &mut Commands, game_data: &ResMut<GameData>) {
     let piece_entity = commands.spawn(NextPieceComponent).id();
 
     PieceComponentSprites::spawn_piece_component(sprite_next_piece, commands, piece_entity);
-}
-
-pub fn init_board(mut commands: Commands) {
-    RectangleWithBorder::new(DISPLAY_BOARD_HEIGHT, DISPLAY_BOARD_WIGTH, BORDER_SIZE, BOARD_COLOR, BORDER_COLOR).spawn(&mut commands, Vec3{ x: 0., y: 0., z: 0.});
-    
-    generate_cell_on_board(&mut commands);
-
-    RectangleWithBorder::new(DISPLAY_NEXT_PIECE_HEIGHT, DISPLAY_NEXT_PIECE_WIGTH, BORDER_SIZE, BOARD_COLOR, BORDER_COLOR).spawn(&mut commands, Vec3{ x: DISPLAY_NEXT_PIECE_POSITION_X, y: DISPLAY_NEXT_PIECE_POSITION_Y, z: 0.});
 }
 
 pub fn init_board_pieces(mut commands: Commands, game_data: ResMut<GameData>) {

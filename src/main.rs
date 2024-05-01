@@ -21,7 +21,8 @@ fn main() {
         .insert_state(GameState::Playing)
         .insert_resource(GameData::new_game())
         .add_systems(Startup, (init_camera, init_score, init_board, init_board_pieces))
-        .add_systems(Update, (setup_score, toggle_resolution, piece_input_system))
+        .add_systems(Update, (setup_score, toggle_resolution, piece_input_system)
+                     .run_if(in_state(GameState::Playing)))
         .insert_resource(ClearColor(Color::BLACK))
         .run();
 }

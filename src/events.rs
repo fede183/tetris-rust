@@ -1,11 +1,17 @@
 use bevy::prelude::*;
-use crate::game::piece::Piece;
-use crate::{board::BoardPieceComponent, PointComponent};
+use crate::config::SQUARE_SIZE;
+use crate::game::game_state::GameData;
+use crate::board::BoardPieceComponent;
 
 
-pub fn piece_input_system(input: Res<ButtonInput<KeyCode>>, mut query: Query<(&mut BoardPieceComponent, &mut Transform)>) {
-    // let mut piece = query.single_mut();
-    // if input.just_pressed(KeyCode::ArrowDown) {
-    //     piece.descend();
-    // }
+pub fn piece_input_system(
+    input: Res<ButtonInput<KeyCode>>, 
+    mut game_data: ResMut<GameData>,
+    mut query: Query<(Entity, &mut Transform), With<BoardPieceComponent>>,
+    ) {
+    if input.just_pressed(KeyCode::ArrowDown) {
+        game_data.descend();
+        let (_, mut transform) = query.single_mut();
+        transform.translation.y -= SQUARE_SIZE;
+    }
 }
