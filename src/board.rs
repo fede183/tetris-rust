@@ -25,7 +25,7 @@ fn generate_cell_on_board(commands: &mut Commands) {
 
     for x in 0..10 {
         for y in 0..20 {
-            cell.spawn(commands, PointMode::Board.get_position(x, y, 1));
+            cell.spawn(commands, PointMode::Board.get_position(x, y).extend(1.));
         }
     }
 }

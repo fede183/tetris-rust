@@ -34,7 +34,7 @@ pub enum PointMode {
 }
 
 impl PointMode {
-    pub fn get_position(&self, x: i32, y: i32, z: i32) -> Vec3 {
+    pub fn get_position(&self, x: i32, y: i32) -> Vec2 {
         let x_position = SQUARE_SIZE* (x as f32);
         let y_position = SQUARE_SIZE* (y as f32);
 
@@ -43,7 +43,7 @@ impl PointMode {
             PointMode::Next => (DISPLAY_FIRST_NEXT_PIECE_POSITION_X + x_position, DISPLAY_FIRST_NEXT_PIECE_POSITION_Y + y_position),
         };
 
-        Vec3 { x: x_position, y: y_position, z: z as f32}
+        Vec2 { x: x_position, y: y_position }
     }
 }
 
@@ -56,7 +56,7 @@ impl PieceToSpriteProvider {
     fn generate_point(&self, point: &Point) -> SpriteBundle {
         let color = point.color.get_color();
         let mode = &self.mode;
-        let position = mode.get_position(point.x, point.y, 3);
+        let position = mode.get_position(point.x, point.y).extend(3.);
         let sprite = generate_rectangle(position, SQUARE_SIZE, SQUARE_SIZE, color);
 
         sprite
