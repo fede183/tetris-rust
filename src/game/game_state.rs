@@ -1,6 +1,7 @@
 use bevy::ecs::schedule::States;
 use bevy::ecs::system::Resource;
 
+use super::consts::{BOARD_HEIGHT, BOARD_WIGTH};
 use super::piece::Piece;
 use super::point::Point;
 
@@ -35,19 +36,39 @@ impl GameData {
         self.descend();
     }
 
-    pub fn descend(&mut self) {
-        self.piece.descend();
+    pub fn descend(&mut self) -> bool {
+        self.move_and_check(Piece::descend)
     }
 
-    pub fn move_left(&mut self) {
-        self.piece.move_left();
+    pub fn move_left(&mut self) -> bool {
+        self.move_and_check(Piece::move_left)
     }
 
-    pub fn move_right(&mut self) {
-        self.piece.move_left();
+    pub fn move_right(&mut self) -> bool {
+        self.move_and_check(Piece::move_right)
     }
 
-    pub fn rotate(&mut self) {
-        self.piece.rotate();
+    pub fn rotate(&mut self) -> bool {
+        self.move_and_check(Piece::rotate)
+    }
+
+    fn is_valid_piece(&self) -> bool {
+        let mut is_valid = true;
+        for point in &self.piece.points {
+            is_valid = is_valid && 0 <= point.x && point.x < BOARD_WIGTH;
+            is_valid = is_valid && 0 <= point.y && point.y < BOARD_HEIGHT;
+        }
+        is_valid
+    }
+
+    fn move_and_check(&mut self, movement_function: fn(&mut Piece)) -> bool {
+        let old_piece = self.piece.clone();
+        movement_function(&mut self.piece);
+        if !self.is_valid_piece() {
+            self.piece = old_piece;
+            return false;
+        }
+
+        true
     }
 }

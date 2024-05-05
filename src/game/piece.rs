@@ -28,39 +28,12 @@ impl PieceType {
     } 
 }
 
+#[derive(Clone)]
 pub struct Piece {
     pub points: Vec<Point>
 }
 
 impl Piece {
-    pub fn descend(&mut self) {
-        for point in &mut self.points {
-            point.descend();
-        } 
-    }
-    pub fn ascend(&mut self) {
-        for point in &mut self.points {
-            point.ascend();
-        } 
-    }
-    pub fn move_right(&mut self) {
-        for point in &mut self.points {
-            point.move_right();
-        } 
-    }
-    pub fn move_left(&mut self) {
-        for point in &mut self.points {
-            point.move_left();
-        } 
-    }
-    pub fn belongs(&self, other_point: &Point) -> bool {
-        for point in &self.points {
-            if point.equal(&other_point) {
-                return true;
-            }
-        }
-        false
-    }
     pub fn generate_random_piece() -> Piece {
         let mut points = Vec::new();
         let piece_type: PieceType = rand::random();
@@ -73,8 +46,35 @@ impl Piece {
 
         Piece { points }
     }
-    pub fn rotate(&mut self) {
-        
-    }
-}
 
+    pub fn descend(&mut self) {
+        for point in &mut self.points {
+            point.descend();
+        }
+    }
+    
+    pub fn move_right(&mut self) {
+        for point in &mut self.points {
+            point.move_right();
+        }
+    }
+    
+    pub fn move_left(&mut self) {
+        for point in &mut self.points {
+            point.move_left();
+        }
+    }
+    
+    pub fn belongs(&self, other_point: &Point) -> bool {
+        for point in &self.points {
+            if point.equal(&other_point) {
+                return true;
+            }
+        }
+        false
+    }
+    
+    pub fn rotate(&mut self) {
+    }
+    
+}
