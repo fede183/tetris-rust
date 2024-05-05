@@ -25,4 +25,9 @@ pub fn piece_input_system(
             transform.translation.x += SQUARE_SIZE;
         }
     }
+    if input.just_pressed(KeyCode::Space) {
+        if game_data.rotate() {
+            transform.rotate_z(0.9);
+        }
+    }
 }

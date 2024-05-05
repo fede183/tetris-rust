@@ -9,8 +9,14 @@ pub struct PieceComponentSprites {
 }
 
 impl PieceComponentSprites {
-    pub fn new(children: Vec<SpriteBundle>) -> PieceComponentSprites {
-        let parent = SpatialBundle::default();
+    pub fn new(children: Vec<SpriteBundle>, point_mode: &PointMode) -> PieceComponentSprites {
+        let parent = SpatialBundle {
+            transform: Transform {
+                translation: point_mode.get_initial_position().extend(3.),
+                ..default()
+            },
+            ..default()
+        };
 
         PieceComponentSprites {
             parent,
@@ -34,6 +40,15 @@ pub enum PointMode {
 }
 
 impl PointMode {
+    pub fn get_initial_position(&self) -> Vec2 {
+        let (x_position, y_position) = match self {
+            PointMode::Board => (-DISPLAY_FIRST_BOARD_POSITION_X, DISPLAY_FIRST_BOARD_POSITION_Y),
+            PointMode::Next => (DISPLAY_FIRST_NEXT_PIECE_POSITION_X, DISPLAY_FIRST_NEXT_PIECE_POSITION_Y),
+        };
+
+        Vec2 { x: x_position, y: y_position }
+    }
+
     pub fn get_position(&self, x: i32, y: i32) -> Vec2 {
         let x_position = SQUARE_SIZE* (x as f32);
         let y_position = SQUARE_SIZE* (y as f32);
@@ -55,8 +70,9 @@ impl PieceToSpriteProvider {
 
     fn generate_point(&self, point: &Point) -> SpriteBundle {
         let color = point.color.get_color();
-        let mode = &self.mode;
-        let position = mode.get_position(point.x, point.y).extend(3.);
+        let x_position = SQUARE_SIZE* (point.x as f32);
+        let y_position = SQUARE_SIZE* (point.y as f32);
+        let position = Vec3 { x: x_position, y: y_position, z: 3. };
         let sprite = generate_rectangle(position, SQUARE_SIZE, SQUARE_SIZE, color);
 
         sprite
@@ -65,6 +81,6 @@ impl PieceToSpriteProvider {
     pub fn generate_piece(&self, piece: &Piece) -> PieceComponentSprites {
         let sprites = piece.points.iter().map(|point| self.generate_point(point)).collect();
 
-        PieceComponentSprites::new(sprites)
+        PieceComponentSprites::new(sprites, &self.mode)
     }
 }
