@@ -10,9 +10,10 @@ pub struct PieceComponentSprites {
 
 impl PieceComponentSprites {
     pub fn new(children: Vec<SpriteBundle>, point_mode: &PointMode) -> PieceComponentSprites {
+        let translation = point_mode.get_position(0, 1).extend(3.);
         let parent = SpatialBundle {
             transform: Transform {
-                translation: point_mode.get_initial_position().extend(3.),
+                translation,
                 ..default()
             },
             ..default()
@@ -42,7 +43,7 @@ pub enum PointMode {
 impl PointMode {
     pub fn get_initial_position(&self) -> Vec2 {
         let (x_position, y_position) = match self {
-            PointMode::Board => (-DISPLAY_FIRST_BOARD_POSITION_X, DISPLAY_FIRST_BOARD_POSITION_Y),
+            PointMode::Board => (DISPLAY_FIRST_BOARD_POSITION_X, DISPLAY_FIRST_BOARD_POSITION_Y),
             PointMode::Next => (DISPLAY_FIRST_NEXT_PIECE_POSITION_X, DISPLAY_FIRST_NEXT_PIECE_POSITION_Y),
         };
 
@@ -53,9 +54,11 @@ impl PointMode {
         let x_position = SQUARE_SIZE* (x as f32);
         let y_position = SQUARE_SIZE* (y as f32);
 
+        let init_position = self.get_initial_position();
+
         let (x_position, y_position) = match self {
-            PointMode::Board => (-DISPLAY_FIRST_BOARD_POSITION_X + x_position, DISPLAY_FIRST_BOARD_POSITION_Y - y_position),
-            PointMode::Next => (DISPLAY_FIRST_NEXT_PIECE_POSITION_X + x_position, DISPLAY_FIRST_NEXT_PIECE_POSITION_Y + y_position),
+            PointMode::Board => (init_position.x + x_position, init_position.y - y_position),
+            PointMode::Next => (init_position.x + x_position, init_position.y + y_position),
         };
 
         Vec2 { x: x_position, y: y_position }
