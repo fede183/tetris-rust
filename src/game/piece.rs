@@ -29,7 +29,7 @@ impl PieceType {
 }
 
 #[derive(Clone)]
-struct PieceRotation(u16);
+pub struct PieceRotation(u16);
 
 impl PieceRotation {
     fn new() -> PieceRotation {
@@ -37,7 +37,7 @@ impl PieceRotation {
     }
 
     fn rotate(&mut self) {
-        if (self.0 == 360) {
+        if self.0 == 360 {
             self.0 = 0;
         } else {
             self.0 += 90;
@@ -84,7 +84,7 @@ impl Piece {
     }
     
     pub fn rotate(&mut self) {
-        self.rotation = ;
+        self.rotation.rotate();
 
         let points = self.points.clone();
         let center_point = points.get(0).expect("Invalid piece");

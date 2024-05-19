@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 use crate::game::consts::{BOARD_HEIGHT, BOARD_WIGTH};
-use crate::game::game_state::GameData;
+use crate::game::game_data::GameData;
 use crate::config::*;
 use crate::sprites::rectagle::RectangleWithBorder;
 use crate::sprites::point_mode::PointMode;

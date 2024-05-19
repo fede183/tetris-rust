@@ -10,7 +10,8 @@ mod bevy_color_converter;
 use bevy::prelude::*;
 use board::*;
 use common::*;
-use game::game_state::{GameState, GameData};
+use game::game_state::GameState;
+use game::game_data::GameData;
 use score::*;
 use events::*;
 

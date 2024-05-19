@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::game::game_state::GameData;
+use crate::game::game_data::GameData;
 use crate::board::BoardPieceComponent;
 use crate::config::SQUARE_SIZE;
 
