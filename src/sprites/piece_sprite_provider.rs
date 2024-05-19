@@ -4,13 +4,17 @@ use crate::game::piece::Piece;
 use crate::config::SQUARE_SIZE;
 use crate::sprites::point_mode::PointMode;
 use crate::sprites::rectagle::generate_rectangle;
-use crate::sprites::piece_sprite_component::PieceComponentSprites;
+
 
 pub struct PieceSpriteProvider {
     pub mode: PointMode,
 }
 
 impl PieceSpriteProvider {
+
+    pub fn new(mode: &PointMode) -> PieceSpriteProvider {
+        PieceSpriteProvider { mode: mode.clone() }
+    }
 
     fn generate_point(&self, point: &Point) -> SpriteBundle {
         let color = point.color.get_color();
@@ -22,9 +26,9 @@ impl PieceSpriteProvider {
         sprite
     }
 
-    pub fn generate_piece(&self, piece: &Piece) -> PieceComponentSprites {
+    pub fn generate_piece(&self, piece: &Piece) -> Vec<SpriteBundle> {
         let sprites = piece.points.iter().map(|point| self.generate_point(point)).collect();
 
-        PieceComponentSprites::new(sprites, &self.mode)
+        sprites
     }
 }

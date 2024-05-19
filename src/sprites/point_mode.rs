@@ -1,6 +1,7 @@
 use crate::config::*;
 use bevy::prelude::*;
 
+#[derive(Clone)]
 pub enum PointMode {
     Board,
     Next,

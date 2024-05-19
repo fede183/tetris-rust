@@ -4,11 +4,7 @@ use crate::game::game_data::GameData;
 use crate::config::*;
 use crate::sprites::rectagle::RectangleWithBorder;
 use crate::sprites::point_mode::PointMode;
-use crate::sprites::piece_sprite_provider::PieceSpriteProvider;
 use crate::sprites::piece_sprite_component::PieceComponentSprites;
-
-const PROVIDER_BOARD_PIECE: PieceSpriteProvider = PieceSpriteProvider { mode: PointMode::Board };
-const PROVIDER_NEXT_PIECE: PieceSpriteProvider = PieceSpriteProvider { mode: PointMode::Next };
 
 #[derive(Component)]
 pub struct PointComponent;
@@ -43,7 +39,7 @@ pub fn init_board(mut commands: Commands) {
 
 fn spawn_piece(commands: &mut Commands, game_data: &ResMut<GameData>) {
     let piece = &game_data.piece;
-    let sprite_piece = PROVIDER_BOARD_PIECE.generate_piece(piece);
+    let sprite_piece = PieceComponentSprites::new(piece, &PointMode::Board);
 
     let piece_entity = commands.spawn(BoardPieceComponent).id();
 
@@ -52,7 +48,7 @@ fn spawn_piece(commands: &mut Commands, game_data: &ResMut<GameData>) {
 
 fn spawn_next_piece(commands: &mut Commands, game_data: &ResMut<GameData>) {
     let next_piece = &game_data.next_piece;
-    let sprite_next_piece = PROVIDER_NEXT_PIECE.generate_piece(next_piece);
+    let sprite_next_piece = PieceComponentSprites::new(next_piece, &PointMode::Next);
 
     let piece_entity = commands.spawn(NextPieceComponent).id();
 

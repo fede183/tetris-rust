@@ -1,5 +1,8 @@
 use bevy::prelude::*;
+use crate::game::piece::Piece;
 use crate::sprites::point_mode::PointMode;
+
+use super::piece_sprite_provider::PieceSpriteProvider;
 
 pub struct PieceComponentSprites {
     pub parent: SpatialBundle,
@@ -7,9 +10,8 @@ pub struct PieceComponentSprites {
 }
 
 impl PieceComponentSprites {
-    pub fn new(children: Vec<SpriteBundle>, point_mode: &PointMode) -> PieceComponentSprites {
+    pub fn new(piece: &Piece, point_mode: &PointMode) -> PieceComponentSprites {
         let translation = point_mode.get_initial_piece_position();
-
         let parent = SpatialBundle {
             transform: Transform {
                 translation,
@@ -17,6 +19,9 @@ impl PieceComponentSprites {
             },
             ..default()
         };
+
+        let provider = PieceSpriteProvider::new(point_mode);
+        let children = provider.generate_piece(piece);
 
         PieceComponentSprites {
             parent,
