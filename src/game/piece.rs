@@ -6,11 +6,11 @@ use super::point::{Point, PointColor};
 #[derive(Debug, RandGen)]
 enum PieceType {
     Z,
-    REVERSE_Z,
+    ReverseZ,
     L,
-    REVERSE_L,
-    LINE,
-    CUBE,
+    ReverseL,
+    Line,
+    Cube,
     T,
 }
 
@@ -18,19 +18,19 @@ impl PieceType {
     pub fn get_piece_coordinates(&self) -> [(i32, i32); 4] {
         match self {
 			PieceType::Z => [(0, 0), (0, 1), (0, 2), (1, 2)],
-			PieceType::REVERSE_Z => [(1, 0), (1, 1), (1, 2), (0, 2)],
+			PieceType::ReverseZ => [(1, 0), (1, 1), (1, 2), (0, 2)],
 			PieceType::L => [(0, 0), (1, 0), (1, 1), (2, 1)],
-			PieceType::REVERSE_L => [(0, 1), (1, 0), (1, 1), (2, 0)],
-			PieceType::LINE => [(0, 0), (1, 0), (2, 0), (3, 0)],
-			PieceType::CUBE => [(0, 0), (0, 1), (1, 0), (1, 1)],
+			PieceType::ReverseL => [(0, 1), (1, 0), (1, 1), (2, 0)],
+			PieceType::Line => [(0, 0), (1, 0), (2, 0), (3, 0)],
+			PieceType::Cube => [(0, 0), (0, 1), (1, 0), (1, 1)],
 			PieceType::T => [(0, 0), (1, 0), (2, 0), (1, 1)],
         }
-    } 
+    }
 }
 
 #[derive(Clone)]
 pub struct Piece {
-    pub points: Vec<Point>
+    pub points: Vec<Point>,
 }
 
 impl Piece {

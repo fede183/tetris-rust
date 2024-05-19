@@ -8,7 +8,8 @@ pub struct PieceComponentSprites {
 
 impl PieceComponentSprites {
     pub fn new(children: Vec<SpriteBundle>, point_mode: &PointMode) -> PieceComponentSprites {
-        let translation = point_mode.get_position(0, 1).extend(3.);
+        let translation = point_mode.get_initial_piece_position();
+
         let parent = SpatialBundle {
             transform: Transform {
                 translation,

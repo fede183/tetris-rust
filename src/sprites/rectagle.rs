@@ -1,5 +1,4 @@
 use bevy::prelude::*;
-use crate::config::*;
 
 pub fn generate_rectangle(positions: Vec3, height: f32, wigth: f32, color: Color) -> SpriteBundle {
     SpriteBundle {

@@ -6,16 +6,16 @@ use crate::sprites::point_mode::PointMode;
 use crate::sprites::rectagle::generate_rectangle;
 use crate::sprites::piece_sprite_component::PieceComponentSprites;
 
-pub struct PieceToSpriteProvider {
+pub struct PieceSpriteProvider {
     pub mode: PointMode,
 }
 
-impl PieceToSpriteProvider {
+impl PieceSpriteProvider {
 
     fn generate_point(&self, point: &Point) -> SpriteBundle {
         let color = point.color.get_color();
-        let x_position = SQUARE_SIZE* (point.x as f32);
-        let y_position = SQUARE_SIZE* (point.y as f32);
+        let x_position = (point.x as f32) * SQUARE_SIZE;
+        let y_position = (point.y as f32) * SQUARE_SIZE;
         let position = Vec3 { x: x_position, y: y_position, z: 3. };
         let sprite = generate_rectangle(position, SQUARE_SIZE, SQUARE_SIZE, color);
 

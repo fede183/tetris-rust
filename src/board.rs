@@ -1,13 +1,14 @@
 use bevy::prelude::*;
+use crate::game::consts::{BOARD_HEIGHT, BOARD_WIGTH};
 use crate::game::game_state::GameData;
 use crate::config::*;
 use crate::sprites::rectagle::RectangleWithBorder;
 use crate::sprites::point_mode::PointMode;
-use crate::sprites::piece_sprite_provider::PieceToSpriteProvider;
+use crate::sprites::piece_sprite_provider::PieceSpriteProvider;
 use crate::sprites::piece_sprite_component::PieceComponentSprites;
 
-const PROVIDER_BOARD_PIECE: PieceToSpriteProvider = PieceToSpriteProvider { mode: PointMode::Board };
-const PROVIDER_NEXT_PIECE: PieceToSpriteProvider = PieceToSpriteProvider { mode: PointMode::Next };
+const PROVIDER_BOARD_PIECE: PieceSpriteProvider = PieceSpriteProvider { mode: PointMode::Board };
+const PROVIDER_NEXT_PIECE: PieceSpriteProvider = PieceSpriteProvider { mode: PointMode::Next };
 
 #[derive(Component)]
 pub struct PointComponent;
@@ -25,8 +26,8 @@ fn generate_cell_on_board(commands: &mut Commands) {
     let square_size = SQUARE_SIZE - 5.;
     let cell = RectangleWithBorder::new(square_size, square_size, 5., BOARD_COLOR, BORDER_SQUARE_COLOR);
 
-    for x in 0..10 {
-        for y in 0..20 {
+    for x in 0..BOARD_WIGTH {
+        for y in 0..BOARD_HEIGHT {
             cell.spawn(commands, PointMode::Board.get_position(x, y).extend(1.));
         }
     }

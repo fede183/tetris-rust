@@ -8,12 +8,10 @@ pub enum PointMode {
 
 impl PointMode {
     pub fn get_initial_position(&self) -> Vec2 {
-        let (x_position, y_position) = match self {
-            PointMode::Board => (DISPLAY_FIRST_BOARD_POSITION_X, DISPLAY_FIRST_BOARD_POSITION_Y),
-            PointMode::Next => (DISPLAY_FIRST_NEXT_PIECE_POSITION_X, DISPLAY_FIRST_NEXT_PIECE_POSITION_Y),
-        };
-
-        Vec2 { x: x_position, y: y_position }
+        match self {
+            PointMode::Board => Vec2{ x: DISPLAY_FIRST_BOARD_POSITION_X, y: DISPLAY_FIRST_BOARD_POSITION_Y },
+            PointMode::Next => Vec2{ x: DISPLAY_FIRST_NEXT_PIECE_POSITION_X, y: DISPLAY_FIRST_NEXT_PIECE_POSITION_Y },
+        }
     }
 
     pub fn get_position(&self, x: i32, y: i32) -> Vec2 {
@@ -28,5 +26,12 @@ impl PointMode {
         };
 
         Vec2 { x: x_position, y: y_position }
+    }
+
+    pub fn get_initial_piece_position(&self) -> Vec3 {
+        match self {
+            PointMode::Board => self.get_position(0, 1).extend(3.),
+            PointMode::Next => self.get_position(0, 0).extend(3.),
+        }
     }
 }
