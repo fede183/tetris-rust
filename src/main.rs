@@ -4,7 +4,7 @@ mod common;
 mod score;
 mod events;
 mod game;
-mod piece_sprite;
+mod sprites;
 mod bevy_color_converter;
 
 use bevy::prelude::*;

@@ -1,8 +1,10 @@
 use bevy::prelude::*;
 use crate::game::game_state::GameData;
 use crate::config::*;
-use crate::common::RectangleWithBorder;
-use crate::piece_sprite::{PieceToSpriteProvider, PointMode, PieceComponentSprites};
+use crate::sprites::rectagle::RectangleWithBorder;
+use crate::sprites::point_mode::PointMode;
+use crate::sprites::piece_sprite_provider::PieceToSpriteProvider;
+use crate::sprites::piece_sprite_component::PieceComponentSprites;
 
 const PROVIDER_BOARD_PIECE: PieceToSpriteProvider = PieceToSpriteProvider { mode: PointMode::Board };
 const PROVIDER_NEXT_PIECE: PieceToSpriteProvider = PieceToSpriteProvider { mode: PointMode::Next };
