@@ -49,7 +49,20 @@ impl GameData {
     }
 
     pub fn rotate(&mut self) -> bool {
-        self.move_and_check(Piece::rotate)
+        let rotate_piece_fn = |piece: &mut Piece| {
+            piece.rotate();
+        }; 
+        self.move_and_check(rotate_piece_fn)
+    }
+
+    fn point_overlap_with_remain(&self, point: &Point) -> bool {
+        for remain in &self.remaining_points {
+            if remain.x == point.x && remain.y == point.y {
+                return true;
+            }
+        }
+
+        false
     }
 
     fn is_valid_piece(&self) -> bool {
@@ -57,6 +70,7 @@ impl GameData {
         for point in &self.piece.points {
             is_valid = is_valid && 0 <= point.x && point.x < BOARD_WIGTH;
             is_valid = is_valid && 0 <= point.y && point.y < BOARD_HEIGHT;
+            is_valid = is_valid && self.point_overlap_with_remain(point);
         }
         is_valid
     }

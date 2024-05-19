@@ -29,8 +29,26 @@ impl PieceType {
 }
 
 #[derive(Clone)]
+struct PieceRotation(u16);
+
+impl PieceRotation {
+    fn new() -> PieceRotation {
+        PieceRotation { 0: 0 }
+    }
+
+    fn rotate(&mut self) {
+        if (self.0 == 360) {
+            self.0 = 0;
+        } else {
+            self.0 += 90;
+        }
+    }
+}
+
+#[derive(Clone)]
 pub struct Piece {
     pub points: Vec<Point>,
+    pub rotation: PieceRotation,
 }
 
 impl Piece {
@@ -44,7 +62,7 @@ impl Piece {
             points.push(Point { x, y, color: color.clone() });
         }
 
-        Piece { points }
+        Piece { points, rotation: PieceRotation::new() }
     }
 
     pub fn descend(&mut self) {
@@ -65,16 +83,19 @@ impl Piece {
         }
     }
     
-    pub fn belongs(&self, other_point: &Point) -> bool {
-        for point in &self.points {
-            if point.equal(&other_point) {
-                return true;
-            }
-        }
-        false
-    }
-    
     pub fn rotate(&mut self) {
+        self.rotation = ;
+
+        let points = self.points.clone();
+        let center_point = points.get(0).expect("Invalid piece");
+
+        for point in &mut self.points {
+            let rotate_x = point.y - center_point.y;
+            let rotate_y = point.x - center_point.x;
+
+            point.x = center_point.x - rotate_x;
+            point.y = center_point.y - rotate_y;
+        }
     }
     
 }

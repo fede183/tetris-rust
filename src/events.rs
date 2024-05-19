@@ -1,5 +1,3 @@
-use std::borrow::{Borrow, BorrowMut};
-
 use bevy::prelude::*;
 use crate::game::game_state::GameData;
 use crate::board::BoardPieceComponent;
@@ -29,7 +27,9 @@ pub fn piece_input_system(
      }
      if input.just_pressed(KeyCode::Space) {
          if game_data.rotate() {
-             transform.rotate_z(0.9);
+            let rotation90 = Quat::from_rotation_z((90.0_f32).to_radians());
+            
+            transform.rotate(rotation90);
          }
      }
 }
