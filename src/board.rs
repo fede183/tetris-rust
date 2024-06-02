@@ -37,7 +37,7 @@ pub fn init_board(mut commands: Commands) {
     RectangleWithBorder::new(DISPLAY_NEXT_PIECE_HEIGHT, DISPLAY_NEXT_PIECE_WIGTH, BORDER_SIZE, BOARD_COLOR, BORDER_COLOR).spawn(&mut commands, Vec3{ x: DISPLAY_NEXT_PIECE_POSITION_X, y: DISPLAY_NEXT_PIECE_POSITION_Y, z: 0.});
 }
 
-fn spawn_piece(commands: &mut Commands, game_data: &ResMut<GameData>) {
+pub fn spawn_piece(commands: &mut Commands, game_data: &ResMut<GameData>) {
     let piece = &game_data.piece;
     let sprite_piece = PieceComponentSprites::new(piece, &PointMode::Board);
 
