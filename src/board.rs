@@ -5,6 +5,7 @@ use crate::config::*;
 use crate::sprites::rectagle::RectangleWithBorder;
 use crate::sprites::point_mode::PointMode;
 use crate::sprites::piece_sprite_component::PieceComponentSprites;
+use crate::sprites::remaining_points_sprite_component::RemainingPointsComponentSprites;
 
 #[derive(Component)]
 pub struct PointComponent;
@@ -43,7 +44,7 @@ pub fn spawn_piece(commands: &mut Commands, game_data: &ResMut<GameData>) {
 
     let piece_entity = commands.spawn(BoardPieceComponent).id();
 
-    PieceComponentSprites::spawn_piece_component(sprite_piece, commands, piece_entity);
+    PieceComponentSprites::spawn_component(sprite_piece, commands, piece_entity);
 }
 
 fn spawn_next_piece(commands: &mut Commands, game_data: &ResMut<GameData>) {
@@ -52,10 +53,21 @@ fn spawn_next_piece(commands: &mut Commands, game_data: &ResMut<GameData>) {
 
     let piece_entity = commands.spawn(NextPieceComponent).id();
 
-    PieceComponentSprites::spawn_piece_component(sprite_next_piece, commands, piece_entity);
+    PieceComponentSprites::spawn_component(sprite_next_piece, commands, piece_entity);
+}
+
+fn spawn_remaining_points(commands: &mut Commands, game_data: &ResMut<GameData>) {
+    let remaining_points = &game_data.remaining_points;
+    let mut sprite_remaining = RemainingPointsComponentSprites::new();
+    sprite_remaining.add_points(remaining_points);
+
+    let remaining_entity = commands.spawn(RemainingPointsComponent).id();
+
+    RemainingPointsComponentSprites::spawn_component(sprite_remaining, commands, remaining_entity);
 }
 
 pub fn init_board_pieces(mut commands: Commands, game_data: ResMut<GameData>) {
     spawn_piece(&mut commands, &game_data);
     spawn_next_piece(&mut commands, &game_data);
+    spawn_remaining_points(&mut commands, &game_data);
 }

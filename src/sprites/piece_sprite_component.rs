@@ -29,7 +29,7 @@ impl PieceComponentSprites {
         }
     }
 
-    pub fn spawn_piece_component(component: PieceComponentSprites, commands: &mut Commands, piece_entity: Entity) {
+    pub fn spawn_component(component: PieceComponentSprites, commands: &mut Commands, piece_entity: Entity) {
         let parent_entity = commands.entity(piece_entity).insert(component.parent).id();
 
         for child in component.children {

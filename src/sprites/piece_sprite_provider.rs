@@ -16,7 +16,7 @@ impl PieceSpriteProvider {
         PieceSpriteProvider { mode: mode.clone() }
     }
 
-    fn generate_point(&self, point: &Point) -> SpriteBundle {
+    pub fn generate_point(&self, point: &Point) -> SpriteBundle {
         let color = point.color.get_color();
         let x_position = (point.x as f32) * SQUARE_SIZE;
         let y_position = (point.y as f32) * SQUARE_SIZE;
@@ -26,9 +26,13 @@ impl PieceSpriteProvider {
         sprite
     }
 
-    pub fn generate_piece(&self, piece: &Piece) -> Vec<SpriteBundle> {
-        let sprites = piece.points.iter().map(|point| self.generate_point(point)).collect();
+    pub fn generate_list_of_points(&self, points: &Vec<Point>) -> Vec<SpriteBundle> {
+        let sprites = points.iter().map(|point| self.generate_point(&point)).collect();
 
         sprites
+    }
+
+    pub fn generate_piece(&self, piece: &Piece) -> Vec<SpriteBundle> {
+        self.generate_list_of_points(&piece.points)
     }
 }
