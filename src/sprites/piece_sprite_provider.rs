@@ -18,9 +18,7 @@ impl PieceSpriteProvider {
 
     pub fn generate_point(&self, point: &Point) -> SpriteBundle {
         let color = point.color.get_color();
-        let x_position = (point.x as f32) * SQUARE_SIZE;
-        let y_position = (point.y as f32) * SQUARE_SIZE;
-        let position = Vec3 { x: x_position, y: y_position, z: 3. };
+        let position = self.mode.get_position(point.x, point.y).extend(3.);
 
         let rectangle = Rectangle::new(SQUARE_SIZE, SQUARE_SIZE, color);
         let sprite = rectangle.generate_sprite(position);

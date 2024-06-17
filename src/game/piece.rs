@@ -53,8 +53,7 @@ pub struct Piece {
 
 impl Piece {
     pub fn generate_random_piece() -> Piece {
-        //let piece_type: PieceType = rand::random();
-        let piece_type = PieceType::ReverseL;
+        let piece_type: PieceType = rand::random();
         let color: PointColor = rand::random();
         let mut points = Vec::new();
 
