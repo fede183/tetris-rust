@@ -11,9 +11,10 @@ pub struct PieceComponentSprites {
 
 impl PieceComponentSprites {
     pub fn new(piece: &Piece, point_mode: &PointMode) -> PieceComponentSprites {
+        let translation = point_mode.get_initial_piece_position(piece);
         let parent = SpatialBundle {
             transform: Transform {
-                translation: Vec3::ZERO,
+                translation,
                 ..default()
             },
             ..default()

@@ -1,4 +1,4 @@
-use crate::config::*;
+use crate::{config::*, game::piece::Piece};
 use bevy::prelude::*;
 
 #[derive(Clone)]
@@ -29,8 +29,14 @@ impl PointMode {
         Vec2 { x: x_position, y: y_position }
     }
 
-    pub fn get_initial_piece_position(&self) -> Vec3 {
-        let initial_position = self.get_position(0, 0);
+    pub fn get_initial_piece_position(&self, piece: &Piece) -> Vec3 {
+        let has_more_that_one_height = piece.points.iter().filter(|point| point.y > 0).count() == 0;
+        
+        let y_position = 
+            if has_more_that_one_height { 0 }
+            else { 1 };
+
+        let initial_position = self.get_position(0, y_position);
 
         initial_position.extend(3.)
     }

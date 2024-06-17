@@ -17,8 +17,8 @@ enum PieceType {
 impl PieceType {
     pub fn get_initial_piece_coordinates(&self) -> [(i32, i32); 4] {
         match self {
-            PieceType::Z => [(0, 0), (0, 1), (0, 2), (1, 2)],
-            PieceType::ReverseZ => [(1, 0), (1, 1), (1, 2), (0, 2)],
+            PieceType::Z => [(0, 0), (1, 0), (1, 1), (2, 1)],
+            PieceType::ReverseZ => [(0, 1), (1, 1), (1, 0), (2, 0)],
             PieceType::L => [(0, 1), (1, 1), (2, 1), (2, 0)],
             PieceType::ReverseL => [(0, 0), (0, 1), (1, 1), (2, 1)],
             PieceType::Line => [(0, 0), (1, 0), (2, 0), (3, 0)],

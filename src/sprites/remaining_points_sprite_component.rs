@@ -12,7 +12,7 @@ pub struct RemainingPointsComponentSprites {
 impl RemainingPointsComponentSprites {
     pub fn new() -> RemainingPointsComponentSprites {
         let point_mode = PointMode::Board;
-        let translation = point_mode.get_initial_piece_position();
+        let translation = Vec3::ZERO;
         let parent = SpatialBundle {
             transform: Transform {
                 translation,

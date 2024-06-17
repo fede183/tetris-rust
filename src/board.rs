@@ -47,7 +47,7 @@ pub fn spawn_piece(commands: &mut Commands, game_data: &ResMut<GameData>) {
     PieceComponentSprites::spawn_component(sprite_piece, commands, piece_entity);
 }
 
-fn spawn_next_piece(commands: &mut Commands, game_data: &ResMut<GameData>) {
+pub fn spawn_next_piece(commands: &mut Commands, game_data: &ResMut<GameData>) {
     let next_piece = &game_data.next_piece;
     let sprite_next_piece = PieceComponentSprites::new(next_piece, &PointMode::Next);
 
