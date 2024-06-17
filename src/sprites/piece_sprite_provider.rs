@@ -3,7 +3,7 @@ use crate::game::point::Point;
 use crate::game::piece::Piece;
 use crate::config::SQUARE_SIZE;
 use crate::sprites::point_mode::PointMode;
-use crate::sprites::rectagle::generate_rectangle;
+use crate::sprites::rectagle::Rectangle;
 
 
 pub struct PieceSpriteProvider {
@@ -21,7 +21,9 @@ impl PieceSpriteProvider {
         let x_position = (point.x as f32) * SQUARE_SIZE;
         let y_position = (point.y as f32) * SQUARE_SIZE;
         let position = Vec3 { x: x_position, y: y_position, z: 3. };
-        let sprite = generate_rectangle(position, SQUARE_SIZE, SQUARE_SIZE, color);
+
+        let rectangle = Rectangle::new(SQUARE_SIZE, SQUARE_SIZE, color);
+        let sprite = rectangle.generate_sprite(position);
 
         sprite
     }

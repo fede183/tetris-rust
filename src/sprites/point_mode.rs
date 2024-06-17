@@ -30,9 +30,8 @@ impl PointMode {
     }
 
     pub fn get_initial_piece_position(&self) -> Vec3 {
-        match self {
-            PointMode::Board => self.get_position(0, 1).extend(3.),
-            PointMode::Next => self.get_position(0, 0).extend(3.),
-        }
+        let initial_position = self.get_position(0, 0);
+
+        initial_position.extend(3.)
     }
 }

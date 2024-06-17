@@ -15,12 +15,12 @@ enum PieceType {
 }
 
 impl PieceType {
-    pub fn get_piece_coordinates(&self) -> [(i32, i32); 4] {
+    pub fn get_initial_piece_coordinates(&self) -> [(i32, i32); 4] {
         match self {
             PieceType::Z => [(0, 0), (0, 1), (0, 2), (1, 2)],
             PieceType::ReverseZ => [(1, 0), (1, 1), (1, 2), (0, 2)],
-            PieceType::L => [(0, 0), (1, 0), (1, 1), (2, 1)],
-            PieceType::ReverseL => [(0, 1), (1, 0), (1, 1), (2, 0)],
+            PieceType::L => [(0, 1), (1, 1), (2, 1), (2, 0)],
+            PieceType::ReverseL => [(0, 0), (0, 1), (1, 1), (2, 1)],
             PieceType::Line => [(0, 0), (1, 0), (2, 0), (3, 0)],
             PieceType::Cube => [(0, 0), (0, 1), (1, 0), (1, 1)],
             PieceType::T => [(0, 0), (1, 0), (2, 0), (1, 1)],
@@ -53,10 +53,12 @@ pub struct Piece {
 
 impl Piece {
     pub fn generate_random_piece() -> Piece {
-        let mut points = Vec::new();
-        let piece_type: PieceType = rand::random();
-        let coordinates_piece = piece_type.get_piece_coordinates();
+        //let piece_type: PieceType = rand::random();
+        let piece_type = PieceType::ReverseL;
         let color: PointColor = rand::random();
+        let mut points = Vec::new();
+
+        let coordinates_piece = piece_type.get_initial_piece_coordinates();
         for coordinate in coordinates_piece {
             let (x, y) = coordinate;
             points.push(Point { x, y, color: color.clone() });
@@ -82,12 +84,17 @@ impl Piece {
             point.move_left();
         }
     }
+
+    pub fn get_center_point(&self) -> &Point {
+        let center_point = self.points.get(1).expect("Invalid piece");
+
+        center_point
+    }
     
     pub fn rotate(&mut self) {
         self.rotation.rotate();
 
-        let points = self.points.clone();
-        let center_point = points.get(0).expect("Invalid piece");
+        let center_point = self.get_center_point().clone();
 
         for point in &mut self.points {
             let rotate_x = point.y - center_point.y;
