@@ -15,7 +15,7 @@ impl PointMode {
         }
     }
 
-    pub fn get_position(&self, x: i32, y: i32) -> Vec2 {
+    pub fn get_position(&self, x: f32, y: f32) -> Vec2 {
         let x_position = SQUARE_SIZE* (x as f32);
         let y_position = SQUARE_SIZE* (y as f32);
 
@@ -30,13 +30,9 @@ impl PointMode {
     }
 
     pub fn get_initial_piece_position(&self, piece: &Piece) -> Vec3 {
-        let has_more_that_one_height = piece.points.iter().filter(|point| point.y > 0).count() == 0;
-        
-        let y_position = 
-            if has_more_that_one_height { 0 }
-            else { 1 };
+        let (x, y) = piece.center_point;
 
-        let initial_position = self.get_position(0, y_position);
+        let initial_position = self.get_position(x, y);
 
         initial_position.extend(3.)
     }

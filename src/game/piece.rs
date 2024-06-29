@@ -19,28 +19,23 @@ impl PieceType {
         match self {
             PieceType::Z => [(0, 0), (1, 0), (1, 1), (2, 1)],
             PieceType::ReverseZ => [(0, 1), (1, 1), (1, 0), (2, 0)],
-            PieceType::L => [(0, 1), (1, 1), (2, 1), (2, 0)],
-            PieceType::ReverseL => [(0, 0), (0, 1), (1, 1), (2, 1)],
+            PieceType::L => [(0, 0), (1, 0), (2, 0), (0, 1)],
+            PieceType::ReverseL => [(0, 0), (1, 0), (2, 0), (2, 1)],
             PieceType::Line => [(0, 0), (1, 0), (2, 0), (3, 0)],
             PieceType::Cube => [(0, 0), (0, 1), (1, 0), (1, 1)],
             PieceType::T => [(0, 0), (1, 0), (2, 0), (1, 1)],
         }
     }
-}
 
-#[derive(Clone)]
-pub struct PieceRotation(u16);
-
-impl PieceRotation {
-    fn new() -> PieceRotation {
-        PieceRotation { 0: 0 }
-    }
-
-    fn rotate(&mut self) {
-        if self.0 == 360 {
-            self.0 = 0;
-        } else {
-            self.0 += 90;
+    pub fn get_center_point_coordinates(&self) -> (f32, f32) {
+        match self {
+            PieceType::Z => (1.0, 0.5),
+            PieceType::ReverseZ => (1.0, 0.5),
+            PieceType::L => (1.0, 0.0),
+            PieceType::ReverseL => (1.0, 0.0),
+            PieceType::Line => (1.5, 0.0),
+            PieceType::Cube => (0.5, 0.5),
+            PieceType::T => (1.0, 0.0),
         }
     }
 }
@@ -48,7 +43,7 @@ impl PieceRotation {
 #[derive(Clone)]
 pub struct Piece {
     pub points: Vec<Point>,
-    pub rotation: PieceRotation,
+    pub center_point: (f32, f32),
 }
 
 impl Piece {
@@ -63,7 +58,7 @@ impl Piece {
             points.push(Point { x, y, color: color.clone() });
         }
 
-        Piece { points, rotation: PieceRotation::new() }
+        Piece { points, center_point: piece_type.get_center_point_coordinates() }
     }
 
     pub fn descend(&mut self) {
@@ -83,24 +78,17 @@ impl Piece {
             point.move_left();
         }
     }
-
-    pub fn get_center_point(&self) -> &Point {
-        let center_point = self.points.get(1).expect("Invalid piece");
-
-        center_point
-    }
     
     pub fn rotate(&mut self) {
-        self.rotation.rotate();
 
-        let center_point = self.get_center_point().clone();
+        let (x, y) = self.center_point;
 
         for point in &mut self.points {
-            let rotate_x = point.y - center_point.y;
-            let rotate_y = point.x - center_point.x;
+            let rotate_x = point.y as f32 - x;
+            let rotate_y = point.x as f32 - y;
 
-            point.x = center_point.x - rotate_x;
-            point.y = center_point.y - rotate_y;
+            point.x = (x - rotate_x) as i32;
+            point.y = (y - rotate_y) as i32;
         }
     }
 }

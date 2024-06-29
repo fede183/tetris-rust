@@ -1,6 +1,8 @@
 use bevy::prelude::*;
+use crate::config::SQUARE_SIZE;
 use crate::game::piece::Piece;
 use crate::sprites::point_mode::PointMode;
+use crate::sprites::rectagle::Rectangle;
 
 use super::piece_sprite_provider::PieceSpriteProvider;
 
@@ -21,7 +23,13 @@ impl PieceComponentSprites {
         };
 
         let provider = PieceSpriteProvider::new(point_mode);
-        let children = provider.generate_piece(piece);
+        let mut children = provider.generate_piece(piece);
+
+        let rectagle = Rectangle::new(10., 10., Color::WHITE);
+
+        let center = rectagle.generate_sprite(Vec3 {x: 0.0, y: 0.0, z: 5.});
+
+        children.push(center);
 
         PieceComponentSprites {
             parent,
