@@ -8,9 +8,6 @@ use crate::sprites::piece_sprite_component::PieceComponentSprites;
 use crate::sprites::remaining_points_sprite_component::RemainingPointsComponentSprites;
 
 #[derive(Component)]
-pub struct PointComponent;
-
-#[derive(Component)]
 pub struct BoardPieceComponent;
 
 #[derive(Component)]
@@ -56,7 +53,7 @@ pub fn spawn_next_piece(commands: &mut Commands, game_data: &ResMut<GameData>) {
     PieceComponentSprites::spawn_component(sprite_next_piece, commands, piece_entity);
 }
 
-fn spawn_remaining_points(commands: &mut Commands, game_data: &ResMut<GameData>) {
+pub fn spawn_remaining_points(commands: &mut Commands, game_data: &ResMut<GameData>) {
     let remaining_points = &game_data.remaining_points;
     let mut sprite_remaining = RemainingPointsComponentSprites::new();
     sprite_remaining.add_points(remaining_points);

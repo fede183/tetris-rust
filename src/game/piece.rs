@@ -84,11 +84,11 @@ impl Piece {
         let (x, y) = self.center_point;
 
         for point in &mut self.points {
-            let rotate_x = point.y as f32 - x;
-            let rotate_y = point.x as f32 - y;
+            let rotate_x = (point.y as f32 - x).abs();
+            let rotate_y = (point.x as f32 - y).abs();
 
-            point.x = (x - rotate_x) as i32;
-            point.y = (y - rotate_y) as i32;
+            point.x = (x - rotate_x).abs() as i32;
+            point.y = (y - rotate_y).abs() as i32;
         }
     }
 }

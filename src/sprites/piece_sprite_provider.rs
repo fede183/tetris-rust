@@ -2,18 +2,16 @@ use bevy::prelude::*;
 use crate::game::point::{Point, PointColor};
 use crate::game::piece::Piece;
 use crate::config::SQUARE_SIZE;
-use crate::sprites::point_mode::PointMode;
 use crate::sprites::rectagle::Rectangle;
 
 
 pub struct PieceSpriteProvider {
-    pub mode: PointMode,
 }
 
 impl PieceSpriteProvider {
 
-    pub fn new(mode: &PointMode) -> PieceSpriteProvider {
-        PieceSpriteProvider { mode: mode.clone() }
+    pub fn new() -> PieceSpriteProvider {
+        PieceSpriteProvider { }
     }
 
     pub fn generate_point(&self, point: &Point) -> SpriteBundle {
@@ -27,7 +25,7 @@ impl PieceSpriteProvider {
         let x_position = (point.x as f32) * SQUARE_SIZE;
         let y_position = (point.y as f32) * SQUARE_SIZE;
 
-        let position = Vec3 { x: x_position, y: y_position, z: 3. };
+        let position = Vec3 { x: x_position, y: -y_position, z: 3. };
 
         position
     }
@@ -48,7 +46,7 @@ impl PieceSpriteProvider {
             let mut positions = self.generate_position(point);
 
             positions.x -= x * SQUARE_SIZE;
-            positions.y -= y * SQUARE_SIZE;
+            positions.y += y * SQUARE_SIZE;
 
             (positions, point.color)
         }).map(|data| self.generate_sprite_using_coordinates(data.0, data.1)).collect();

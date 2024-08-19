@@ -1,7 +1,6 @@
 use bevy::prelude::*;
 use crate::game::point::Point;
 use crate::sprites::point_mode::PointMode;
-
 use super::piece_sprite_provider::PieceSpriteProvider;
 
 pub struct RemainingPointsComponentSprites {
@@ -12,7 +11,7 @@ pub struct RemainingPointsComponentSprites {
 impl RemainingPointsComponentSprites {
     pub fn new() -> RemainingPointsComponentSprites {
         let point_mode = PointMode::Board;
-        let translation = Vec3::ZERO;
+        let translation = point_mode.get_position(0.0, 0.0).extend(3.);
         let parent = SpatialBundle {
             transform: Transform {
                 translation,
@@ -39,7 +38,7 @@ impl RemainingPointsComponentSprites {
     }
 
     fn add_point(&mut self, point: &Point) {
-        let provider = PieceSpriteProvider::new(&PointMode::Board);
+        let provider = PieceSpriteProvider::new();
         let point_sprite = provider.generate_point(point);
         self.children.push(point_sprite);
     }

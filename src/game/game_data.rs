@@ -2,7 +2,7 @@ use std::usize;
 
 use bevy::ecs::system::Resource;
 use super::consts::{BOARD_HEIGHT, BOARD_WIGTH};
-use super::piece::Piece;
+use super::piece::{self, Piece};
 use super::point::Point;
 
 #[derive(Resource)]
@@ -88,8 +88,9 @@ impl GameData {
     }
 
     fn disable_piece(&mut self) {
-        for point in &mut self.piece.points {
-            self.remaining_points.push(*point);
+        let cloned_points = self.piece.points.clone();
+        for point in cloned_points {
+            self.remaining_points.push(point);
         }
 
         self.piece = self.next_piece.clone();
