@@ -58,7 +58,7 @@ impl GameData {
 
     fn point_overlap_with_remain(&self, point: &Point) -> bool {
         for remain in &self.remaining_points {
-            if point.equal(remain) {
+            if point.x == remain.x && point.y == remain.y {
                 return true;
             }
         }
