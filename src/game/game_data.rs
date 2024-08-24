@@ -2,7 +2,7 @@ use std::usize;
 
 use bevy::ecs::system::Resource;
 use super::consts::{BOARD_HEIGHT, BOARD_WIGTH};
-use super::piece::{self, Piece};
+use super::piece::Piece;
 use super::point::Point;
 
 #[derive(Resource)]

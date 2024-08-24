@@ -1,17 +1,12 @@
 use bevy::prelude::*;
 use crate::config::*;
+use crate::game::game_data::GameData;
 
-#[derive(Component)]
-pub struct ScoreAndLines {
-    pub score: i32,
-    pub lines: i32,
-}
-
-pub fn init_score(mut commands: Commands) {
-    commands.spawn(ScoreAndLines {score:0, lines:0});
-}
-
-pub fn setup_score(mut commands: Commands, asset_server: Res<AssetServer>, query: Query<&ScoreAndLines>) {
+pub fn setup_score(
+    mut commands: Commands, 
+    asset_server: Res<AssetServer>, 
+    game_data: ResMut<GameData>
+) {
     let font = asset_server.load("fonts/textFont.ttf");
     let text_style = TextStyle {
         font: font.clone(),
@@ -20,10 +15,8 @@ pub fn setup_score(mut commands: Commands, asset_server: Res<AssetServer>, query
     };
     let text_justification = JustifyText::Center;
 
-    let score = query.single();
-
-    let score_text = "Score: ".to_owned() + &score.score.to_string();
-    let lines_text = "Lines: ".to_owned() + &score.lines.to_string();
+    let score_text = "Score: ".to_owned() + &game_data.score.to_string();
+    let lines_text = "Lines: ".to_owned() + &game_data.lines.to_string();
 
     commands.spawn((
         Text2dBundle {
