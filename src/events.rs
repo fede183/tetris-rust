@@ -24,12 +24,7 @@ pub fn piece_input_system(
         } else {
             let entity_next = query_next_piece_transformation.single_mut();
             let entity_remainings = query_remainings_transformation.single_mut();
-            commands.entity(entity).despawn_recursive();
-            commands.entity(entity_next).despawn_recursive();
-            commands.entity(entity_remainings).despawn_recursive();
-            spawn_piece(&mut commands, &game_data);
-            spawn_next_piece(&mut commands, &game_data);
-            spawn_remaining_points(&mut commands, &game_data);
+            respawn_components(&mut commands, &game_data, entity, entity_next, entity_remainings);
         }
     }
     if input.just_pressed(KeyCode::ArrowLeft) {
@@ -44,7 +39,18 @@ pub fn piece_input_system(
     }
     if input.just_pressed(KeyCode::Space) {
         if game_data.rotate() {
-            commands.entity(entity).despawn_recursive();
+            let entity_next = query_next_piece_transformation.single_mut();
+            let entity_remainings = query_remainings_transformation.single_mut();
+            respawn_components(&mut commands, &game_data, entity, entity_next, entity_remainings);
         }
     }
+}
+
+fn respawn_components(commands: &mut Commands, game_data: &ResMut<GameData>, entity: Entity, entity_next: Entity, entity_remainings: Entity) {
+    commands.entity(entity).despawn_recursive();
+    commands.entity(entity_next).despawn_recursive();
+    commands.entity(entity_remainings).despawn_recursive();
+    spawn_piece(commands, &game_data);
+    spawn_next_piece(commands, &game_data);
+    spawn_remaining_points(commands, &game_data);
 }

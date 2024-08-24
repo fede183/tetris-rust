@@ -81,14 +81,14 @@ impl Piece {
     
     pub fn rotate(&mut self) {
 
-        let (x, y) = self.center_point;
+        let center_point = self.points[1];
 
         for point in &mut self.points {
-            let rotate_x = (point.y as f32 - x).abs();
-            let rotate_y = (point.x as f32 - y).abs();
+            let rotate_x = point.y - center_point.y;
+            let rotate_y = point.x - center_point.x;
 
-            point.x = (x - rotate_x).abs() as i32;
-            point.y = (y - rotate_y).abs() as i32;
+            point.x = center_point.x - rotate_x;
+            point.y = center_point.y - rotate_y;
         }
     }
 }
