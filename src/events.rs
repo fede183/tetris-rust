@@ -18,7 +18,7 @@ pub fn piece_input_system(
     ) {
     let (entity, mut transform) = query_piece_transformation.single_mut();
 
-    if input.just_pressed(KeyCode::ArrowDown) {
+    if input.just_pressed(KeyCode::ArrowDown) || input.pressed(KeyCode::ArrowDown) {
         if game_data.descend() {
             transform.translation.y -= SQUARE_SIZE;
         } else {

@@ -36,6 +36,7 @@ impl GameData {
 
         if !it_descend {
             self.disable_piece();
+            self.check_complete_lines();
         }
 
         it_descend
@@ -123,7 +124,9 @@ impl GameData {
         if points_in_line.count() == BOARD_WIGTH as usize {
             let remaining_points_minus_complete_line = self.remaining_points.iter_mut().filter(|point| point.y != line);
             let remaining_points_below = remaining_points_minus_complete_line.map(|point| {
-                point.y += 1;
+                if point.y <= line {
+                    point.y += 1;
+                }
                 *point
             });
 
