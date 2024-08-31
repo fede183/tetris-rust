@@ -15,6 +15,7 @@ use game::game_state::GameState;
 use game::game_data::GameData;
 use score::*;
 use events::*;
+use timer::*;
 
 
 fn main() {

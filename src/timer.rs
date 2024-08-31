@@ -1,9 +1,12 @@
+use bevy::time::{Timer, TimerMode};
+use bevy::ecs::system::Resource;
+
 #[derive(Resource)]
-pub struct MatchTime(Timer)
+pub struct MatchTime(pub Timer);
 
 impl MatchTime {
     pub fn new() -> Self {
-        Self(Timer::from_seconds(60.0, TimerMode::Once)
+        Self(Timer::from_seconds(1.0, TimerMode::Once))
     }
 }
 
@@ -12,18 +15,5 @@ impl MatchTime {
 impl Default for MatchTime {
     fn default() -> Self {
         Self::new()
-    }
-}
-
-fn countdown(
-    time: Res<Time>,
-    mut match_time: ResMut<MatchTime>
-) {
-    match_time.0.tick(time.delta());
-}
-
-fn end_match(match_time: Res<MatchTime>) {
-    if match_time.0.finished() {
-        // Here we would rest our game
     }
 }
