@@ -5,7 +5,7 @@ use crate::board::spawn_piece;
 use crate::board::spawn_next_piece;
 use crate::board::spawn_remaining_points;
 use crate::BoardPieceComponent;
-use crate::MatchTime;
+use crate::EventBlocker;
 use crate::NextPieceComponent;
 use crate::RemainingPointsComponent;
 
@@ -13,21 +13,22 @@ pub fn piece_input_system(
     mut commands: Commands,
     input: Res<ButtonInput<KeyCode>>,
     mut game_data: ResMut<GameData>,
-    mut timer: ResMut<MatchTime>,
+    mut event_blocker: ResMut<EventBlocker>,
     time: ResMut<Time>,
     mut query_piece_transformation: Query<(Entity, &mut Transform), With<BoardPieceComponent>>,
     mut query_next_piece_transformation: Query<Entity, With<NextPieceComponent>>,
     mut query_remainings_transformation: Query<Entity, With<RemainingPointsComponent>>,
     ) {
 
-    timer.0.tick(time.delta());
-
-    if !timer.0.just_finished() {
-        return;
+    if input.just_pressed(KeyCode::ArrowDown) || input.pressed(KeyCode::ArrowDown) {
+        if event_blocker.is_block(time) {
+            return;
+        }
+        event_blocker.block();
     }
 
     let (entity, mut transform) = query_piece_transformation.single_mut();
-
+    
     if input.just_pressed(KeyCode::ArrowDown) || input.pressed(KeyCode::ArrowDown) {
         if game_data.descend() {
             transform.translation.y -= SQUARE_SIZE;
