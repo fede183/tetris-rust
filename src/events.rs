@@ -20,7 +20,10 @@ pub fn piece_input_system(
     mut query_remainings_transformation: Query<Entity, With<RemainingPointsComponent>>,
     ) {
 
-    if input.just_pressed(KeyCode::ArrowDown) || input.pressed(KeyCode::ArrowDown) {
+    if key_pressed(&input, KeyCode::ArrowDown) || 
+        key_pressed(&input, KeyCode::ArrowLeft) || 
+        key_pressed(&input, KeyCode::ArrowRight)
+    {
         if event_blocker.is_block(time) {
             return;
         }
@@ -29,7 +32,7 @@ pub fn piece_input_system(
 
     let (entity, mut transform) = query_piece_transformation.single_mut();
     
-    if input.just_pressed(KeyCode::ArrowDown) || input.pressed(KeyCode::ArrowDown) {
+    if key_pressed(&input, KeyCode::ArrowDown) {
         if game_data.descend() {
             transform.translation.y -= SQUARE_SIZE;
         } else {
@@ -38,12 +41,12 @@ pub fn piece_input_system(
             respawn_components(&mut commands, &game_data, entity, entity_next, entity_remainings);
         }
     }
-    if input.just_pressed(KeyCode::ArrowLeft) {
+    if key_pressed(&input, KeyCode::ArrowLeft) {
         if game_data.move_left() {
             transform.translation.x -= SQUARE_SIZE;
         }
     }
-    if input.just_pressed(KeyCode::ArrowRight) {
+    if key_pressed(&input, KeyCode::ArrowRight) {
         if game_data.move_right() {
             transform.translation.x += SQUARE_SIZE;
         }
@@ -64,4 +67,11 @@ fn respawn_components(commands: &mut Commands, game_data: &ResMut<GameData>, ent
     spawn_piece(commands, &game_data);
     spawn_next_piece(commands, &game_data);
     spawn_remaining_points(commands, &game_data);
+}
+
+fn key_pressed(
+    input: &Res<ButtonInput<KeyCode>>,
+    key_code: KeyCode
+    ) -> bool {
+    input.just_pressed(key_code) || input.pressed(key_code)
 }
