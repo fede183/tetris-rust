@@ -19,10 +19,6 @@ impl EventBlocker {
             return false;
         }
 
-        if self.timer == None {
-            self.timer = Some(Timer::from_seconds(0.15, TimerMode::Once));
-        }
-        
         if let Some(timer_value) = &mut self.timer {
 
             timer_value.tick(time.delta());
@@ -37,6 +33,7 @@ impl EventBlocker {
     }
 
     pub fn block(&mut self) {
+        self.timer = Some(Timer::from_seconds(0.15, TimerMode::Once));
         self.button_was_press = true;
     }
 }
