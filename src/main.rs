@@ -6,7 +6,7 @@ mod events;
 mod game;
 mod sprites;
 mod bevy_color_converter;
-mod timer;
+mod event_bloker;
 
 use bevy::prelude::*;
 use board::*;
@@ -15,7 +15,7 @@ use game::game_state::GameState;
 use game::game_data::GameData;
 use score::*;
 use events::*;
-use timer::*;
+use event_bloker::*;
 
 
 fn main() {
