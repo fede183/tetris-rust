@@ -109,13 +109,13 @@ impl GameData {
     }
 
     fn check_complete_lines(&mut self) {
-        let mut complete_lines_in_move = 0;
         for line in 0..BOARD_HEIGHT {
             self.check_complete_specific_line(line);
-            complete_lines_in_move += 1;
         }
 
-        self.score += (10 * complete_lines_in_move) + 2 * (complete_lines_in_move - 1);
+        if self.lines > 0 {
+            self.score += (10 * self.lines) + 2 * (self.lines- 1);
+        }
     }
 
     fn check_complete_specific_line(&mut self, line: i32) {

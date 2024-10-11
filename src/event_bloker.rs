@@ -1,17 +1,17 @@
 use bevy::prelude::ResMut;
-use bevy::time::{Time, Timer, TimerMode};
+use bevy::time::Time;
 use bevy::ecs::system::Resource;
 
 #[derive(Resource)]
 pub struct EventBlocker {
-    timer: Option<Timer>,
+    time: f32,
     button_was_press: bool,
 }
 
 
 impl EventBlocker {
     pub fn new() -> Self {
-        Self { timer: None , button_was_press: false }
+        Self { time: 0.0, button_was_press: false }
     }
 
     pub fn is_block(&mut self, time: ResMut<Time>) -> bool {
@@ -19,21 +19,17 @@ impl EventBlocker {
             return false;
         }
 
-        if let Some(timer_value) = &mut self.timer {
-
-            timer_value.tick(time.delta());
-            if timer_value.finished() {
-                self.button_was_press = false;
-                self.timer = None;
-                return false;
-            }
+        self.time += time.delta().as_secs_f32();
+        if self.time >= 0.15 {
+            self.button_was_press = false;
+            self.time = 0.0;
+            return false;
         }
 
         return true;
     }
 
     pub fn block(&mut self) {
-        self.timer = Some(Timer::from_seconds(0.15, TimerMode::Once));
         self.button_was_press = true;
     }
 }
