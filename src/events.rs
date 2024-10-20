@@ -5,6 +5,7 @@ use crate::board::spawn_piece;
 use crate::board::spawn_next_piece;
 use crate::board::spawn_remaining_points;
 use crate::BoardPieceComponent;
+use crate::CycleTimer;
 use crate::EventBlocker;
 use crate::NextPieceComponent;
 use crate::RemainingPointsComponent;
@@ -31,7 +32,7 @@ pub fn piece_input_system(
     }
 
     let (entity, mut transform) = query_piece_transformation.single_mut();
-    
+
     if key_pressed(&input, KeyCode::ArrowDown) {
         if game_data.descend() {
             transform.translation.y -= SQUARE_SIZE;
@@ -41,6 +42,7 @@ pub fn piece_input_system(
             respawn_components(&mut commands, &game_data, entity, entity_next, entity_remainings);
         }
     }
+    
     if key_pressed(&input, KeyCode::ArrowLeft) {
         if game_data.move_left() {
             transform.translation.x -= SQUARE_SIZE;
@@ -60,6 +62,27 @@ pub fn piece_input_system(
     }
 }
 
+pub fn cycle_system(
+    mut commands: Commands,
+    mut game_data: ResMut<GameData>,
+    mut cycle_system: ResMut<CycleTimer>,
+    time: ResMut<Time>,
+    mut query_piece_transformation: Query<(Entity, &mut Transform), With<BoardPieceComponent>>,
+    mut query_next_piece_transformation: Query<Entity, With<NextPieceComponent>>,
+    mut query_remainings_transformation: Query<Entity, With<RemainingPointsComponent>>,
+    ) {
+    cycle_system.timer.tick(time.delta());
+
+    // if it finished, move down
+    if cycle_system.timer.finished() {
+        let (entity, mut _transform) = query_piece_transformation.single_mut();
+        game_data.cycle();
+        let entity_next = query_next_piece_transformation.single_mut();
+        let entity_remainings = query_remainings_transformation.single_mut();
+        respawn_components(&mut commands, &game_data, entity, entity_next, entity_remainings);
+    }
+}
+
 fn respawn_components(commands: &mut Commands, game_data: &ResMut<GameData>, entity: Entity, entity_next: Entity, entity_remainings: Entity) {
     commands.entity(entity).despawn_recursive();
     commands.entity(entity_next).despawn_recursive();
@@ -75,3 +98,4 @@ fn key_pressed(
     ) -> bool {
     input.just_pressed(key_code) || input.pressed(key_code)
 }
+

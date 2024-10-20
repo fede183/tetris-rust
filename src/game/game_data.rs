@@ -59,7 +59,7 @@ impl GameData {
 
     fn point_overlap_with_remain(&self, point: &Point) -> bool {
         for remain in &self.remaining_points {
-            if point.x == remain.x && point.y == remain.y {
+            if point.equal(remain) {
                 return true;
             }
         }
@@ -114,7 +114,7 @@ impl GameData {
         }
 
         if self.lines > 0 {
-            self.score += (10 * self.lines) + 2 * (self.lines- 1);
+            self.score += (10 * self.lines) + 2 * (self.lines - 1);
         }
     }
 
