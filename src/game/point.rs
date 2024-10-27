@@ -30,6 +30,6 @@ impl Point {
     }
     
     pub fn equal(&self, point: &Point) -> bool {
-        self.x == point.x && self.x == point.y
+        self.x == point.x && self.y == point.y
     }
 }

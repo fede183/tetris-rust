@@ -27,7 +27,7 @@ impl GameData {
 
     pub fn cycle(&mut self) {
         if !self.is_game_over() {
-            self.check_complete_lines();
+            self.descend();
         }
     }
 

@@ -4,9 +4,10 @@ use crate::config::SQUARE_SIZE;
 use crate::board::spawn_piece;
 use crate::board::spawn_next_piece;
 use crate::board::spawn_remaining_points;
+use crate::game::game_state::GameState;
 use crate::BoardPieceComponent;
-use crate::CycleTimer;
-use crate::EventBlocker;
+use crate::cycle_timer::CycleTimer;
+use crate::event_bloker::EventBlocker;
 use crate::NextPieceComponent;
 use crate::RemainingPointsComponent;
 
@@ -74,12 +75,22 @@ pub fn cycle_system(
     cycle_system.timer.tick(time.delta());
 
     // if it finished, move down
-    if cycle_system.timer.finished() {
+    if cycle_system.timer.finished() && cycle_system.timer.just_finished() {
         let (entity, mut _transform) = query_piece_transformation.single_mut();
         game_data.cycle();
         let entity_next = query_next_piece_transformation.single_mut();
         let entity_remainings = query_remainings_transformation.single_mut();
         respawn_components(&mut commands, &game_data, entity, entity_next, entity_remainings);
+    }
+}
+
+pub fn toggle_game_over(
+    state: Res<State<GameState>>,
+    mut next_state: ResMut<NextState<GameState>>,
+    game_data: ResMut<GameData>,
+) {
+    if *state.get() == GameState::Playing && game_data.is_game_over() {
+        next_state.set(GameState::GameOver);
     }
 }
 
