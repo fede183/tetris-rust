@@ -100,7 +100,7 @@ impl GameData {
 
     pub fn is_game_over(&self) -> bool {
         for point in &self.remaining_points {
-            if point.y == BOARD_HEIGHT {
+            if point.y == BOARD_HEIGHT - 1 && !self.is_valid_piece() {
                 return true;
             }
         }
