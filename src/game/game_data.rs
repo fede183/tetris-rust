@@ -54,7 +54,18 @@ impl GameData {
         let rotate_piece_fn = |piece: &mut Piece| {
             piece.rotate();
         }; 
-        self.move_and_check(rotate_piece_fn)
+        let old_piece = self.piece.clone();
+        rotate_piece_fn(&mut self.piece);
+
+        if !self.is_valid_piece_remain() {
+            self.piece = old_piece;
+            return false;
+        }
+
+        while !self.is_valid_piece_left_border() && self.move_right() {}
+        while !self.is_valid_piece_right_border() && self.move_left() {}
+
+        true
     }
 
     fn point_overlap_with_remain(&self, point: &Point) -> bool {
@@ -67,13 +78,36 @@ impl GameData {
         false
     }
 
-    fn is_valid_piece(&self) -> bool {
+    fn is_valid_piece_left_border(&self) -> bool {
         let mut is_valid = true;
         for point in &self.piece.points {
             is_valid = is_valid && 0 <= point.x && point.x < BOARD_WIGTH;
+        }
+        is_valid
+    }
+        
+    fn is_valid_piece_right_border(&self) -> bool {
+        let mut is_valid = true;
+        for point in &self.piece.points {
             is_valid = is_valid && 0 <= point.y && point.y < BOARD_HEIGHT;
+        }
+        is_valid
+    }
+        
+    fn is_valid_piece_remain(&self) -> bool {
+        let mut is_valid = true;
+        for point in &self.piece.points {
             is_valid = is_valid && !self.point_overlap_with_remain(point);
         }
+        is_valid
+    }
+
+    fn is_valid_piece(&self) -> bool {
+        let mut is_valid = true;
+        is_valid = is_valid && self.is_valid_piece_left_border();
+        is_valid = is_valid && self.is_valid_piece_right_border();
+        is_valid = is_valid && self.is_valid_piece_remain();
+
         is_valid
     }
 

@@ -21,16 +21,24 @@ pub fn piece_input_system(
     mut query_next_piece_transformation: Query<Entity, With<NextPieceComponent>>,
     mut query_remainings_transformation: Query<Entity, With<RemainingPointsComponent>>,
     ) {
+    
+    event_blocker.timer.tick(time.delta());
 
-    if key_pressed(&input, KeyCode::ArrowDown) || 
+    if !(key_pressed(&input, KeyCode::ArrowDown) || 
         key_pressed(&input, KeyCode::ArrowLeft) || 
-        key_pressed(&input, KeyCode::ArrowRight)
-    {
-        if event_blocker.is_block(time) {
-            return;
-        }
-        event_blocker.block();
+        key_pressed(&input, KeyCode::ArrowRight) ||
+        key_pressed(&input, KeyCode::Space)) {
+        return;
     }
+
+    if query_piece_transformation.is_empty() {
+        return;
+    } 
+
+    if !event_blocker.timer.finished() {
+        return;
+    }
+    event_blocker.timer.reset();
 
     let (entity, mut transform) = query_piece_transformation.single_mut();
 

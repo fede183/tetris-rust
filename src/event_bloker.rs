@@ -1,36 +1,16 @@
-use bevy::prelude::ResMut;
-use bevy::time::Time;
+use std::time::Duration;
+use bevy::time::{Timer, TimerMode};
 use bevy::ecs::system::Resource;
 
 #[derive(Resource)]
 pub struct EventBlocker {
-    time: f32,
-    button_was_press: bool,
+    pub timer: Timer,
 }
 
 
 impl EventBlocker {
     pub fn new() -> Self {
-        Self { time: 0.0, button_was_press: false }
-    }
-
-    pub fn is_block(&mut self, time: ResMut<Time>) -> bool {
-        if !self.button_was_press {
-            return false;
-        }
-
-        self.time += time.delta().as_secs_f32();
-        if self.time >= 0.15 {
-            self.button_was_press = false;
-            self.time = 0.0;
-            return false;
-        }
-
-        return true;
-    }
-
-    pub fn block(&mut self) {
-        self.button_was_press = true;
+        Self { timer: Timer::new(Duration::from_secs_f32(0.1), TimerMode::Once) }
     }
 }
 
