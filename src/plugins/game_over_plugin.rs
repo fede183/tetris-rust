@@ -22,33 +22,32 @@ fn init_game_over_windows(
     RectangleWithBorder::new(DISPLAY_GAME_OVER_WINDOW_WIGTH, DISPLAY_GAME_OVER_WINDOW_HEIGHT, BORDER_SIZE, BOARD_COLOR, BORDER_COLOR).spawn(&mut commands, Vec3{ x: 0., y: 0., z: 7.});
     
     let font = asset_server.load("fonts/textFont.ttf");
-    let text_style = TextStyle {
+    let text_style = TextFont {
         font: font.clone(),
         font_size: SCORE_FONT_SIZE,
-        color: SCORE_COLOR,
+        ..default()
     };
-    let text_justification = JustifyText::Center;
-
     let game_over_text = "Game Over!!!".to_owned();
 
-    commands.spawn(
-        Text2dBundle {
-            text: Text::from_section(game_over_text, text_style.clone())
-                .with_justify(text_justification),
-            transform: Transform::from_xyz(0., 10., 8.),
-            ..default()
-        },
+    commands.spawn((
+            Text2d::new(game_over_text),
+            TextLayout::new_with_justify(JustifyText::Center),
+            text_style.clone(),
+            Transform::from_xyz(0., 10., 8.),
+            TextColor(SCORE_COLOR.into()),
+        )
     );
 
     let final_score_text = "Score: ".to_owned() + &game_data.score.to_string();
 
     commands.spawn(
-        Text2dBundle {
-            text: Text::from_section(final_score_text, text_style.clone())
-                .with_justify(text_justification),
-            transform: Transform::from_xyz(0., -10., 8.),
-            ..default()
-        },
+        (
+            Text2d::new(final_score_text),
+            TextLayout::new_with_justify(JustifyText::Center),
+            text_style.clone(),
+            Transform::from_xyz(0., -10., 8.),
+            TextColor(SCORE_COLOR.into()),
+        )
     );
 
     // TODO: add buttons for exit and replay

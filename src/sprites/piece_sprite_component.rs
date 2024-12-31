@@ -3,22 +3,17 @@ use crate::game::piece::Piece;
 use crate::sprites::point_mode::PointMode;
 
 use super::piece_sprite_provider::PieceSpriteProvider;
+use super::rectagle::RectangleBundle;
 
 pub struct PieceComponentSprites {
-    pub parent: SpatialBundle,
-    pub children: Vec<SpriteBundle>,
+    pub parent: (Transform, Visibility),
+    pub children: Vec<RectangleBundle>,
 }
 
 impl PieceComponentSprites {
     pub fn new(piece: &Piece, point_mode: &PointMode) -> PieceComponentSprites {
         let translation = point_mode.get_initial_piece_position(piece);
-        let parent = SpatialBundle {
-            transform: Transform {
-                translation,
-                ..default()
-            },
-            ..default()
-        };
+        let parent = (Transform::from_xyz(translation.x, translation.y, translation.z), Visibility::Visible);
 
         let provider = PieceSpriteProvider::new();
         let children = provider.generate_piece(piece);
@@ -34,7 +29,7 @@ impl PieceComponentSprites {
 
         for child in component.children {
             let child_entity = commands.spawn(child).id();
-            commands.entity(parent_entity).push_children(&[child_entity]);
+            commands.entity(parent_entity).add_child(child_entity);
         }
     }
 }

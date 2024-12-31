@@ -1,4 +1,4 @@
-use bevy::prelude::Color;
+use bevy::prelude::LinearRgba;
 use crate::game::consts::*;
 
 pub const SQUARE_SIZE: f32 = 30.;
@@ -52,7 +52,7 @@ const FIRST_NEXT_PIECE_POSITION_Y: f32 = 0.5;
 pub const DISPLAY_FIRST_NEXT_PIECE_POSITION_X: f32 = SQUARE_SIZE*(-FIRST_NEXT_PIECE_POSITION_X + NEXT_PIECE_POSITION_X);
 pub const DISPLAY_FIRST_NEXT_PIECE_POSITION_Y: f32 = SQUARE_SIZE*(-FIRST_NEXT_PIECE_POSITION_Y + NEXT_PIECE_POSITION_Y);
 
-pub const BOARD_COLOR: Color = Color::BLACK;
-pub const SCORE_COLOR: Color = Color::PURPLE;
-pub const BORDER_COLOR: Color = Color::Rgba { red: 150., green: 150., blue: 150., alpha: 255. };
-pub const BORDER_SQUARE_COLOR: Color = Color::GRAY;
+pub const BOARD_COLOR: LinearRgba = LinearRgba::BLACK;
+pub const SCORE_COLOR: LinearRgba = LinearRgba::new(255., 51., 255., 255.);
+pub const BORDER_COLOR: LinearRgba = LinearRgba::new(150., 150., 150., 255.);
+pub const BORDER_SQUARE_COLOR: LinearRgba = LinearRgba::new(192., 192., 192., 255.);
