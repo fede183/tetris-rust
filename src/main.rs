@@ -4,9 +4,7 @@ mod score;
 mod events;
 mod game;
 mod sprites;
-mod bevy_color_converter;
-mod event_bloker;
-mod cycle_timer;
+mod utils;
 mod plugins;
 
 use bevy::prelude::*;

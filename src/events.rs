@@ -6,8 +6,8 @@ use crate::board::spawn_next_piece;
 use crate::board::spawn_remaining_points;
 use crate::game::game_state::GameState;
 use crate::BoardPieceComponent;
-use crate::cycle_timer::CycleTimer;
-use crate::event_bloker::EventBlocker;
+use crate::utils::cycle_timer::CycleTimer;
+use crate::utils::event_bloker::EventBlocker;
 use crate::NextPieceComponent;
 use crate::RemainingPointsComponent;
 
