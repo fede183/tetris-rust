@@ -24,8 +24,8 @@ pub fn init_score(
     let score_text = "Score: 0".to_owned();
     let lines_text = "Lines: 0".to_owned();
     
-    let text_score = Text::new(score_text);
-    let text_lines = Text::new(lines_text);
+    let text_score = Text2d::new(score_text);
+    let text_lines = Text2d::new(lines_text);
     
     let transform_score = Transform::from_xyz(DISPLAY_SCORE_POSITION_X, DISPLAY_SCORE_POSITION_Y, 3.);
     let transform_lines = Transform::from_xyz(DISPLAY_SCORE_POSITION_X, DISPLAY_LINES_POSITION_Y, 3.);
@@ -48,7 +48,7 @@ pub fn init_score(
 
 pub fn update_score(
     game_data: ResMut<GameData>,
-    mut query_score: Query<&mut Text, With<ScoreComponent>>,
+    mut query_score: Query<&mut Text2d, With<ScoreComponent>>,
 ) {
 
     let score_text = "Score: ".to_owned() + &game_data.score.to_string();
@@ -60,7 +60,7 @@ pub fn update_score(
 
 pub fn update_lines(
     game_data: ResMut<GameData>,
-    mut query_lines: Query<&mut Text, With<LinesComponent>>,
+    mut query_lines: Query<&mut Text2d, With<LinesComponent>>,
 ) {
 
     let lines_text = "Lines: ".to_owned() + &game_data.lines.to_string();
