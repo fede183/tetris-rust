@@ -48,7 +48,7 @@ impl RectangleWithBorder {
 
     pub fn spawn(&self, commands: &mut Commands, positions: Vec3) {
         let border_sprite = self.border.generate_sprite(positions);
-        let fill_sprite = self.fill.generate_sprite(positions);
+        let fill_sprite = self.fill.generate_sprite(Vec3 { x: positions.x, y: positions.y, z: positions.z + 1. });
         
         commands.spawn(border_sprite);
         commands.spawn(fill_sprite);

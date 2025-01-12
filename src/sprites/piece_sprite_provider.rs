@@ -5,13 +5,12 @@ use crate::config::SQUARE_SIZE;
 use super::rectagle::{RectangleBundle, Rectangle};
 
 
-pub struct PieceSpriteProvider {
-}
+pub struct PieceSpriteProvider {}
 
 impl PieceSpriteProvider {
 
     pub fn new() -> PieceSpriteProvider {
-        PieceSpriteProvider { }
+        PieceSpriteProvider {}
     }
 
     pub fn generate_point(&self, point: &Point) -> RectangleBundle {
@@ -25,7 +24,7 @@ impl PieceSpriteProvider {
         let x_position = (point.x as f32) * SQUARE_SIZE;
         let y_position = (point.y as f32) * SQUARE_SIZE;
 
-        let position = Vec3 { x: x_position, y: -y_position, z: 3. };
+        let position = Vec3 { x: x_position, y: -y_position, z: 4. };
 
         position
     }

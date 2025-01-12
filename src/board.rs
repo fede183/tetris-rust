@@ -22,7 +22,7 @@ fn generate_cell_on_board(commands: &mut Commands) {
 
     for x in 0..BOARD_WIGTH {
         for y in 0..BOARD_HEIGHT {
-            cell.spawn(commands, PointMode::Board.get_position(x as f32, y as f32).extend(1.));
+            cell.spawn(commands, PointMode::Board.get_position(x as f32, y as f32).extend(2.));
         }
     }
 }
