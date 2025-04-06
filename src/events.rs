@@ -7,7 +7,7 @@ use crate::board::spawn_remaining_points;
 use crate::game::game_state::GameState;
 use crate::BoardPieceComponent;
 use crate::utils::cycle_timer::CycleTimer;
-use crate::utils::event_bloker::EventBlocker;
+use crate::utils::event_blocker::EventBlocker;
 use crate::NextPieceComponent;
 use crate::RemainingPointsComponent;
 
@@ -22,8 +22,6 @@ pub fn piece_input_system(
     mut query_remainings_transformation: Query<Entity, With<RemainingPointsComponent>>,
     ) {
     
-    event_blocker.timer.tick(time.delta());
-
     if !(key_pressed(&input, KeyCode::ArrowDown) || 
         key_pressed(&input, KeyCode::ArrowLeft) || 
         key_pressed(&input, KeyCode::ArrowRight) ||
@@ -33,12 +31,13 @@ pub fn piece_input_system(
 
     if query_piece_transformation.is_empty() {
         return;
-    } 
+    }
 
-    if !event_blocker.timer.finished() {
+    if !event_blocker.check(time.clone()) {
         return;
     }
-    event_blocker.timer.reset();
+    
+    event_blocker.lock_process();
 
     let (entity, mut transform) = query_piece_transformation.single_mut();
 
@@ -69,27 +68,34 @@ pub fn piece_input_system(
             respawn_components(&mut commands, &game_data, entity, entity_next, entity_remainings);
         }
     }
+
+    event_blocker.finish_process();
 }
 
 pub fn cycle_system(
     mut commands: Commands,
     mut game_data: ResMut<GameData>,
     mut cycle_system: ResMut<CycleTimer>,
+    mut event_blocker: ResMut<EventBlocker>,
     time: ResMut<Time>,
     mut query_piece_transformation: Query<(Entity, &mut Transform), With<BoardPieceComponent>>,
     mut query_next_piece_transformation: Query<Entity, With<NextPieceComponent>>,
     mut query_remainings_transformation: Query<Entity, With<RemainingPointsComponent>>,
     ) {
-    cycle_system.timer.tick(time.delta());
 
-    // if it finished, move down
-    if cycle_system.timer.finished() && cycle_system.timer.just_finished() {
-        let (entity, mut _transform) = query_piece_transformation.single_mut();
-        game_data.cycle();
-        let entity_next = query_next_piece_transformation.single_mut();
-        let entity_remainings = query_remainings_transformation.single_mut();
-        respawn_components(&mut commands, &game_data, entity, entity_next, entity_remainings);
+    if !event_blocker.check(time.clone()) {
+        return;
     }
+
+    if !cycle_system.check(time.clone()) {
+        return;
+    }
+
+    let (entity, mut _transform) = query_piece_transformation.single_mut();
+    game_data.cycle();
+    let entity_next = query_next_piece_transformation.single_mut();
+    let entity_remainings = query_remainings_transformation.single_mut();
+    respawn_components(&mut commands, &game_data, entity, entity_next, entity_remainings);
 }
 
 pub fn toggle_game_over(

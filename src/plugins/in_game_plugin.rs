@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use crate::utils::cycle_timer::*;
 use crate::board::*;
-use crate::utils::event_bloker::EventBlocker;
+use crate::utils::event_blocker::EventBlocker;
 use crate::events::*;
 use crate::score::*;
 use crate::config::*;

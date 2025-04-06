@@ -90,13 +90,15 @@ impl Piece {
         let center_point_y = center_point.1;
 
         let beta: f32 = PI / 2.;
+        let beta_cos: f32 = beta.cos();
+        let beta_sin: f32 = beta.sin();
 
         for point in &mut self.points {
             let x_0 = point.x as f32 - center_point_x;
-            let y_0 = -(point.y as f32 - center_point_y);
+            let y_0 = - (point.y as f32 - center_point_y);
 
-            let x_prima = x_0 * beta.cos() - y_0 * beta.sin();
-            let y_prima = x_0 * beta.sin() + y_0 * beta.cos();
+            let x_prima = (x_0 * beta_cos) - (y_0 * beta_sin);
+            let y_prima = (x_0 * beta_sin) + (y_0 * beta_cos);
 
             point.x = (center_point_x + x_prima) as i32;
             point.y = (center_point_y - y_prima) as i32;
